@@ -24,7 +24,9 @@ bool contain(T t, U u) {
 /// Return digit sum of the binary representation of a given number.
 /// It is also called the population count, popcount or sideways sum.
 /// \link http://en.wikipedia.org/wiki/Hamming_weight \endlink
-template<class T> size_t count_set_bits(T number) {
+template<class T> 
+size_t count_set_bits(T number) {
+    // XXX: performance
     size_t result = 0;
     while (number != 0) {
         if (number % 2 == 1) result += 1;
@@ -38,6 +40,7 @@ template<class T> size_t count_set_bits(T number) {
 /// 1-based (like ffs()), 0 means no bits are set (number == 0)
 template<class T>
 size_t highest_set_bit_index(T number) {
+    // XXX: performance
     if (number == 0)
         return 0;
     size_t result = 0;
@@ -52,6 +55,7 @@ size_t highest_set_bit_index(T number) {
 /// 1-based (like ffs()), 0 means no bits are set (number == 0)
 template<class T>
 size_t lowest_set_bit_index(T number) {
+    // XXX: performance
     if (number == 0)
         return 0;
     size_t result = 1;
@@ -76,6 +80,28 @@ T lowest_set_bit(T number) {
     if (number == 0)
         return 0;
     return T(1) << (lowest_set_bit_index(number) - 1);
+}
+
+/// Return random integer number less than a given number.
+template<class T>
+T random(T number = std::numeric_limits<int>::max()) {
+
+    // random last n bits
+    struct {
+        T operator()(size_t n) const {
+            // XXX: performance
+            T result = 0;
+            for(size_t i = 0; i < n; i++) {
+                result += rand() % 2;
+                result *= 2;
+            }
+            return result;
+        }
+    }random_n_bits;
+
+    AUTO(n, highest_set_bit_index(number));
+    T result = random_n_bits(n);
+    return result % number;
 }
 
 /// Enumerate every subset in a number
