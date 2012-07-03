@@ -14,6 +14,7 @@ Contents:
    intro.rst
    style.rst
    utility.rst
+   algebra.rst
 
 
 

@@ -58,15 +58,36 @@ TEST(bits, base) {
     EXPECT_EQ(next_combination(100), 104);
     EXPECT_EQ(next_combination(992), 1039);
 
-    EXPECT_TRUE(addition_is_safe(INT_MAX / 4, INT_MAX / 4));
-    EXPECT_FALSE(addition_is_safe(INT_MAX - 2, INT_MAX - 2));
+}
 
-    EXPECT_TRUE(multiplication_is_safe(int(sqrt(INT_MAX) / 2), 
-                                       int(sqrt(INT_MAX) / 2)));
-    EXPECT_FALSE(multiplication_is_safe(INT_MAX - 2, INT_MAX - 2));
+TEST(bits, overflow) {
+    using namespace sbl;
+    ASSERT_EQ(power_integer(3, 0), 1);
+    ASSERT_EQ(power_integer(3, 1), 3);
+    ASSERT_EQ(power_integer(3, 2), 9);
+    ASSERT_EQ(power_integer(3, 10), 59049);
+    ASSERT_EQ(power_integer(3, 19), 1162261467);
 
-    EXPECT_TRUE(exponentiation_is_safe(3, 14));
-    EXPECT_TRUE(exponentiation_is_safe(2LL, 30));
-    EXPECT_FALSE(exponentiation_is_safe(2, 31));
-    EXPECT_FALSE(exponentiation_is_safe(2, 32));
+    int a, b;
+
+    a = INT_MAX / 2, b = INT_MAX - a;
+    EXPECT_TRUE(addition_is_safe(a, b));
+    EXPECT_FALSE(addition_is_safe(a, b + 1));
+    EXPECT_FALSE(addition_is_safe(a + 1, b));
+
+    a = int(sqrt(INT_MAX)), b = INT_MAX / a;
+    EXPECT_TRUE(multiplication_is_safe(a, b));
+    EXPECT_FALSE(multiplication_is_safe(a, b + 1));
+    EXPECT_FALSE(multiplication_is_safe(a + 1, b));
+
+    a = 2, b = std::numeric_limits<int>::digits;
+    EXPECT_TRUE(exponentiation_is_safe(a, b - 1));
+    EXPECT_FALSE(exponentiation_is_safe(a, b));
+
+    for(a = 2; a < 100; a++) {
+        b = log(std::numeric_limits<int>::max()) / log(a);
+        EXPECT_TRUE(exponentiation_is_safe(a, b));
+        EXPECT_FALSE(exponentiation_is_safe(a, b + 1));
+    }
+
 }

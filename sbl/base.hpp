@@ -9,6 +9,13 @@ namespace sbl {
 #define FOR(i, c)  for(AUTO(i, (c).begin()); i != (c).end(); ++i)
 #define RFOR(i, c) for(AUTO(i, (c).end()); i-- != (c).begin();  )
 
+/// Test assertions at compile-time
+#define STATIC_ASSERT(expr, msg)                                             \
+    do {                                                                     \
+        bool ERROR_##msg[expr ? 1 : -1];                                     \
+        static_cast<void>(ERROR_##msg);                                      \
+    } while(false)
+
 /// Return run time for this thread in second.
 static double spend_time() {
     return double(clock()) / CLOCKS_PER_SEC;

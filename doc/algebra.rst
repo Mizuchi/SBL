@@ -1,0 +1,7 @@
+Algebra
+==========
+
+.. toctree::
+   :glob:
+
+   algebra/*
