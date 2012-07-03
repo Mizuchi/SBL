@@ -1,0 +1,7 @@
+Utility
+==========
+
+.. toctree::
+   :glob:
+
+   utility/*
