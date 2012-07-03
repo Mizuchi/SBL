@@ -9,6 +9,7 @@ TEST(bits, base) {
     EXPECT_EQ(power_of_two(34LL), 17179869184LL);
     EXPECT_EQ(power_of_two(0), 1);
 
+
     EXPECT_FALSE(contain(10, 0));
     EXPECT_TRUE(contain(10, 1));
     EXPECT_FALSE(contain(10, 2));

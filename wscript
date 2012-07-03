@@ -47,7 +47,8 @@ def build_doc(bld):
         cwd    = bld.path.abspath(),
         source = ['doxygen.log']
                  + bld.path.ant_glob(os.path.join(kDocumentPath, '*.py'))
-                 + bld.path.ant_glob(os.path.join(kDocumentPath, '*.rst')),
+                 + bld.path.ant_glob(os.path.join(kDocumentPath, '*.rst'))
+                 + bld.path.ant_glob(os.path.join(kDocumentPath, '**', '*.rst')),
         target = bld.path.find_or_declare('doc/html/index.html'),
         name   = 'html',
     )
@@ -55,7 +56,7 @@ def build_doc(bld):
 def unittest(bld):
     bld.read_shlib('gtest')
     bld.program(
-            source='unittest/main.cpp', 
+            source='unittest/main.cpp',
             target='all_tests',
             use='gtest',
             )
@@ -69,12 +70,3 @@ def build(bld):
     build_doc(bld)
     bld.add_group()
     unittest(bld)
-
-    #bld(
-    #    rule   = "${DOXYGEN} -b html -d build/doctrees doc build/doc/html",
-    #    cwd    = bld.path.abspath(),
-    #    source = bld.path.ant_glob('doc/*.rst')
-    #             + bld.path.ant_glob('doc/*.py'),
-    #    target = bld.path.find_or_declare('doc/html/index.html'),
-    #    name   = 'xml',
-    #)
