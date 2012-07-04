@@ -231,19 +231,21 @@ template<class T>
 T integer_sqrt(T number) {
     __is_integer<T>();
     // bisection method
+    // low always satisfy low * low <= number
+    // high always satisfy high * high > number
     // XXX: Should rewrite with newton method for performance reason.
     // http://en.wikipedia.org/wiki/Integer_square_root
     // http://code.activestate.com/recipes/577821-integer-square-root-function/
-    T left = 0;
-    T right = std::max(number, 2);
-    while (right - left > 1) {
-        T middle = (left + right) / 2;
+    T low = 0;
+    T high = std::max(number, 2);
+    while (high - low > 1) {
+        T middle = (low + high) / 2;
         if (middle <= number / middle)
-            left = middle;
+            low = middle;
         else
-            right = middle;
+            high = middle;
     }
-    return left;
+    return low;
 }
 
 } // namespace sbl
