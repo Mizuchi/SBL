@@ -18,8 +18,8 @@ T add_mod(T x, T y, T z) {
 }
 
 // (x * y) % z
-template<class T>
-T mul_mod(T x, T y, T z) {
+template<class T, class U>
+T mul_mod(T x, U y, T z) {
     if (y == 0)
         return 0;
     if (y % 2 == 1) {
@@ -32,8 +32,8 @@ T mul_mod(T x, T y, T z) {
 }
 
 // (x ** y) % z
-template<class T>
-T pow_mod(T x, T y, T z) {
+template<class T, class U>
+T pow_mod(T x, U y, T z) {
     if (y == 0)
         return 1;
     if (y % 2 == 1) {

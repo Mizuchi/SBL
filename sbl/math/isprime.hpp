@@ -1,0 +1,31 @@
+#ifndef _sbl_is_prime
+#define _sbl_is_prime
+#include"modular.hpp"
+
+namespace sbl {
+/// Return whether a integer number is a prime
+template<class T> 
+bool isprime(T x) {
+    struct {
+        bool main(T n, T a, T d, unsigned long s) {
+            d = pow_mod(a, d, n);
+            if (d == 1) return true;
+            while (s--)
+                if (d + 1 == n) return true;
+                else d = mul_mod(d, d, n);
+            return false;
+        }
+    } test;
+    if (x < 2 or (x > 2 and x % 2 == 0)) return false;
+    unsigned long a[] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 0}, s = 0;
+    if (x <= 0xFFFFFFFF) 
+        a[1] = 7, a[2] = 61, a[3] = 0;
+    T d = x - 1;
+    while (d % 2 == 0) s++, d /= 2;
+    for (unsigned long i = 0; 0 < a[i] and a[i] < x; i++)
+        if (!test.main(x, a[i], d, s))
+            return false;
+    return true;
+}
+} // namespace sbl
+#endif

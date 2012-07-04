@@ -58,7 +58,6 @@ def unittest(bld):
     def update_unittest_main(self):
         '''Automatically generate unit test main.cpp'''
         allTestFile = get_all_files_from_dir('unittest')
-        self.set_inputs(allTestFile)
         include = ""
         for testFile in allTestFile:
             include += '#include"../' + testFile + '"\n'
@@ -77,6 +76,7 @@ def unittest(bld):
     bld.read_shlib('gtest')
     bld(
         rule=update_unittest_main,
+        source=get_all_files_from_dir('unittest'),
         target="test.cpp",
     )
     bld.program(
