@@ -33,7 +33,6 @@ def build_doc(bld):
             name = 'doxygen'
             )
 
-
     kDocumentPath = 'doc'
     path = {
             'doctrees': os.path.join(out, 'doctrees'),
@@ -53,21 +52,45 @@ def build_doc(bld):
         name   = 'html',
     )
 
+
 def unittest(bld):
+
+    def update_unittest_main(self):
+        '''Automatically generate unit test main.cpp'''
+        allTestFile = get_all_files_from_dir('unittest')
+        self.set_inputs(allTestFile)
+        include = ""
+        for testFile in allTestFile:
+            include += '#include"../' + testFile + '"\n'
+        code = r'''
+        #include<gtest/gtest.h>
+        {}
+        int main(int argv, char **argc) {{
+            testing::InitGoogleTest(&argv, argc);
+            return RUN_ALL_TESTS();
+        }}
+        '''.format(include)
+        with open('build/test.cpp', 'w') as maincpp:
+            maincpp.write(code)
+        return self.exec_command("true")
+
     bld.read_shlib('gtest')
-    bld.program(
-            source='unittest/main.cpp',
-            target='all_tests',
-            use='gtest',
-            )
     bld(
-            rule="./${SRC}",
-            source='all_tests',
-            name='unittest',
-            )
+        rule=update_unittest_main,
+        target="test.cpp",
+    )
+    bld.program(
+        source='test.cpp',
+        target='test',
+        use='gtest',
+    )
+    bld(
+        rule="./${SRC}",
+        source='test',
+        name='unittest',
+    )
 
 def build(bld):
     build_doc(bld)
     bld.add_group()
     unittest(bld)
-
