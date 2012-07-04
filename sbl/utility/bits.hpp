@@ -229,6 +229,7 @@ bool exponentiation_is_safe(T a, U b) {
 /// Return greatest integer less than or equal to the square root of given integer.
 template<class T>
 T integer_sqrt(T number) {
+    __is_integer<T>();
     // bisection method
     // XXX: Should rewrite with newton method for performance reason.
     // http://en.wikipedia.org/wiki/Integer_square_root

@@ -6,8 +6,10 @@ namespace sbl {
 /// Return whether a integer number is a prime
 template<class T> 
 bool isprime(T x) {
+    // http://en.wikipedia.org/wiki/Primality_test
+    // http://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test
     struct {
-        bool main(T n, T a, T d, unsigned long s) {
+        bool operator()(T n, T a, T d, unsigned long s) const {
             d = pow_mod(a, d, n);
             if (d == 1) return true;
             while (s--)
@@ -23,7 +25,7 @@ bool isprime(T x) {
     T d = x - 1;
     while (d % 2 == 0) s++, d /= 2;
     for (unsigned long i = 0; 0 < a[i] and a[i] < x; i++)
-        if (!test.main(x, a[i], d, s))
+        if (not test(x, a[i], d, s))
             return false;
     return true;
 }

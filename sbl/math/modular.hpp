@@ -4,7 +4,7 @@
 #include"../utility/bits.hpp"
 
 namespace sbl {
-// (x + y) % z
+/// Return (x + y) % z
 template<class T>
 T add_mod(T x, T y, T z) {
     assert(x >= 0 and x < z);
@@ -17,7 +17,7 @@ T add_mod(T x, T y, T z) {
     return x - (z - y);
 }
 
-// (x * y) % z
+/// Return (x * y) % z
 template<class T, class U>
 T mul_mod(T x, U y, T z) {
     if (y == 0)
@@ -31,7 +31,7 @@ T mul_mod(T x, U y, T z) {
     }
 }
 
-// (x ** y) % z
+/// Return (x ** y) % z
 template<class T, class U>
 T pow_mod(T x, U y, T z) {
     if (y == 0)

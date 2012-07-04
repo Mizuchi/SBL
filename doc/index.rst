@@ -15,6 +15,7 @@ Contents:
    style.rst
    utility.rst
    algebra.rst
+   math.rst
 
 
 
