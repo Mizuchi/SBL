@@ -226,5 +226,24 @@ bool exponentiation_is_safe(T a, U b) {
     }
 }
 
+/// Return greatest integer less than or equal to the square root of given integer.
+template<class T>
+T integer_sqrt(T number) {
+    // bisection method
+    // XXX: Should rewrite with newton method for performance reason.
+    // http://en.wikipedia.org/wiki/Integer_square_root
+    // http://code.activestate.com/recipes/577821-integer-square-root-function/
+    T left = 0;
+    T right = std::max(number, 2);
+    while (right - left > 1) {
+        T middle = (left + right) / 2;
+        if (middle <= number / middle)
+            left = middle;
+        else
+            right = middle;
+    }
+    return left;
+}
+
 } // namespace sbl
 #endif

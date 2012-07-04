@@ -58,6 +58,15 @@ TEST(bits, base) {
     EXPECT_EQ(next_combination(100), 104);
     EXPECT_EQ(next_combination(992), 1039);
 
+    ASSERT_EQ(integer_sqrt(0), 0);
+    ASSERT_EQ(integer_sqrt(1), 1);
+
+
+    for (int i = 1; i < 100; i ++) {
+        int sqrt = integer_sqrt(i);
+        EXPECT_TRUE(sqrt <= i / sqrt) << "integer_sqrt: " << i;
+        EXPECT_TRUE(sqrt + 1 > i / (sqrt + 1)) << "integer_sqrt: " << i;
+    }
 }
 
 TEST(bits, overflow) {
@@ -84,7 +93,7 @@ TEST(bits, overflow) {
     EXPECT_TRUE(exponentiation_is_safe(a, b - 1));
     EXPECT_FALSE(exponentiation_is_safe(a, b));
 
-    for(a = 2; a < 100; a++) {
+    for (a = 2; a < 100; a++) {
         b = log(std::numeric_limits<int>::max()) / log(a);
         EXPECT_TRUE(exponentiation_is_safe(a, b));
         EXPECT_FALSE(exponentiation_is_safe(a, b + 1));
