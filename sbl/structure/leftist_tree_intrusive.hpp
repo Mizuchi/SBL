@@ -5,16 +5,16 @@ namespace sbl {
 namespace intrusive {
 
 /** \brief This is a intrusive data structure version of leftist tree.
- * 
+ *
  * User must provide the node type, manage the memory, and guarantee:
- * 
+ *
  * Member variant NodePtr leftChild record left child
  *
  * Member variant NodePtr rightChild record right child
  *
  * Member variant size_t npl record the null path length
  *
- * Member function compare two NodePtr 
+ * Member function compare two NodePtr
  */
 template <class NodePtr>
 class LeftistTree {
@@ -35,29 +35,33 @@ class LeftistTree {
             a->npl = get_length(a->rightChild) + 1;
             return a;
         }
+        NodePtr root;
     public:
-        NodePtr top;
-        LeftistTree(): top(0) {}
+        LeftistTree(): root(0) {}
 
         void push(NodePtr a) {
             a->leftChild = a->rightChild = NULL;
             a->npl = 0;
-            top = bind(top, a);
+            root = bind(root, a);
         }
 
         NodePtr pop() {
-            NodePtr p = top;
-            top = bind(top->leftChild, top->rightChild);
+            NodePtr p = root;
+            root = bind(root->leftChild, root->rightChild);
             return p;
         }
 
         void merge(LeftistTree &a) {
-            top = bind(top, a.top);
-            a.top = NULL;
+            root = bind(root, a.root);
+            a.root = NULL;
+        }
+
+        const NodePtr &top() const {
+            return root;
         }
 
         void clear() {
-            top = NULL;
+            root = NULL;
         }
 };
 } // namespace intrusive
