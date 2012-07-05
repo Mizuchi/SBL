@@ -3,6 +3,7 @@
 #include<functional>
 #include<algorithm>
 #include<vector>
+#include"../utility/bits.hpp"
 
 namespace sbl {
 using std::size_t;
@@ -12,8 +13,9 @@ class StaticRangeMinimunQuery {
     private:
         std::vector<T> f;
         size_t s;
-        static size_t log2(size_t x, size_t i = 31) {
-            return x >= (1UL << i) ? i : log2(x, i - 1);
+        static size_t log2(size_t x) {
+            assert(x > 0);
+            return highest_set_bit_index(x) - 1;
         }
         static T max(T a, T b) {
             return Compare()(a, b) ? b : a;
