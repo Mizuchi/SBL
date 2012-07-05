@@ -16,6 +16,7 @@ Contents:
    utility.rst
    algebra.rst
    math.rst
+   structure.rst
 
 
 

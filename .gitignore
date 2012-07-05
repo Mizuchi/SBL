@@ -15,5 +15,5 @@
 *.gch
 /.*
 
-test/
+yytjtest/
 build/

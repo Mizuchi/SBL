@@ -7,6 +7,11 @@ import os
 
 def options(opt):
     opt.load('compiler_cxx')
+    opt.add_option("--doc", 
+            action="store_true", 
+            default=False, 
+            help="Building documentation"
+    )
 
 def configure(cfg):
     cfg.find_program('dot', var='DOT')
@@ -91,6 +96,8 @@ def unittest(bld):
     )
 
 def build(bld):
-    #build_doc(bld)
+    if bld.options.doc:
+        build_doc(bld)
+
     bld.add_group()
     unittest(bld)
