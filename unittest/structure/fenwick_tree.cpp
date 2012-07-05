@@ -25,6 +25,7 @@ TEST(structure, fenwick_small) {
     EXPECT_EQ(a.min_index_that_prefix_sum_greater_than(8), 5);
     EXPECT_EQ(a.min_index_that_prefix_sum_greater_than(14), 5);
     EXPECT_EQ(a.min_index_that_prefix_sum_greater_than(15), 8);
+    EXPECT_EQ(a.min_index_that_prefix_sum_greater_than(100), 10);
 
 
     a.increase_nth_element(4, -6);

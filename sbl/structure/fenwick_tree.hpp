@@ -51,9 +51,14 @@ template <class T, class Op = std::plus<T> > class FenwickTree {
             return result;
         }
 
+        /// Returns number of element.
+        size_t size() const {
+            return x.size();
+        }
+
         /// Increases value of n-th element by inc.
         void increase_nth_element(size_t n, T inc) {
-            for (size_t i = n; i < x.size(); i |= i + 1)
+            for (size_t i = n; i < size(); i |= i + 1)
                 x[i] = op(x[i], inc);
         }
 
@@ -62,12 +67,18 @@ template <class T, class Op = std::plus<T> > class FenwickTree {
         /// \post this->prefix_sum(result) > sum
         /// \post this->prefix_sum(result-1) <= sum
         size_t min_index_that_prefix_sum_greater_than(T sum) const {
+
+            if (size() == 0) return 0;
+            if (prefix_sum(size() - 1) <= sum) return size();
+
             size_t result = 0;
+
             /// always equal to the prefix_sum(result-1)
             T prefixSum = identity(op);
-            for (size_t c = highest_set_bit(x.size()); c > 0; c >>= 1)
+
+            for (size_t c = highest_set_bit(size()); c > 0; c >>= 1)
                 // Determine every bit in the result from high to low
-                if (result + c - 1 < x.size()
+                if (result + c - 1 < size()
                     and op(prefixSum, x[result + c - 1]) <= sum) {
                     prefixSum = op(prefixSum, x[result + c - 1]);
                     result += c;
