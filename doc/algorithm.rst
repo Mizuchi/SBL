@@ -1,0 +1,7 @@
+Algorithm
+==========
+
+.. toctree::
+   :glob:
+
+   algorithm/*

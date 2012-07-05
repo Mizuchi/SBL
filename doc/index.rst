@@ -17,6 +17,7 @@ Contents:
    algebra.rst
    math.rst
    structure.rst
+   algorithm.rst
 
 
 

@@ -25,8 +25,8 @@ It is not tested widely. Use At Your Own Risk.
 Algorithms
 ===========
 
-* Knuth–Morris–Pratt algorithm
-* Merge algorithms (Counting inversion)
+* Z algorithm
+* Merge sorting for counting inversion
 * djb2 hash function
 
 * Polya-Burnside Method
