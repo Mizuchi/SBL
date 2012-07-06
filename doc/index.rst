@@ -18,6 +18,7 @@ Contents:
    math.rst
    structure.rst
    algorithm.rst
+   graph.rst
 
 
 
