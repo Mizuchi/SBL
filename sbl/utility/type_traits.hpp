@@ -44,7 +44,7 @@ template<class T> T declval();
 
 /// Deduces the return type of a function call expression at compile type.
 template<class>
-class result_of;
+struct result_of;
 
 template<class F>
 struct result_of<F()> {

@@ -1,7 +1,13 @@
 #ifndef _sbl_graph_base
 #define _sbl_graph_base
 #include<algorithm>
+#include<limits>
+#include<cstddef>
+#include<vector>
 #include"../../utility/macro.hpp"
+#define SIZE_MAX (std::numeric_limits<std::size_t>::max())
+
+
 
 namespace sbl {
 
@@ -22,8 +28,7 @@ namespace sbl {
 ///
 /// User could use macro foredge to travel graph.
 class GraphBase {
-    private:
-
+    protected:
         struct EdgeImpl {
             virtual ~EdgeImpl() {}
         };
@@ -65,10 +70,10 @@ class GraphBase {
                 EdgeImpl *impl;
 
                 /// Reference counting
-                size_t *refCount;
+                std::size_t *refCount;
 
                 /// Only GraphBase can construct a Edge.
-                Edge(EdgeImpl *_): impl(_), refCount(new size_t(1)) {}
+                Edge(EdgeImpl *_): impl(_), refCount(new std::size_t(1)) {}
 
                 /// In order to keep it simple and compatible,
                 /// user must use std::swap instead of this member function.
@@ -79,15 +84,15 @@ class GraphBase {
         };
 
     protected:
-        
+
         /// Derived use this function to get a EdgeImpl from edge
-        EdgeImpl *get_edge_impl(Edge edge) {
+        static EdgeImpl *get_edge_impl(Edge edge) {
             // Do not delete, don't break reference counting. Use it careful.
             return edge.impl;
         }
 
         /// Derived use this function to create a Edge
-        Edge make_edge(EdgeImpl *pimpl) {
+        static Edge make_edge(EdgeImpl *pimpl) {
             return Edge(pimpl);
         }
 
@@ -105,9 +110,9 @@ class GraphBase {
         /// @return the edge we added
         virtual Edge add_edge(Node head, Node tail) = 0;
 
-        /// Remove a exist edge.
+        /// Remove a exist edge. if edge is not in the graph, UB.
         /// @return whether edge in the graph.
-        virtual bool erase(Edge edge) const = 0;
+        virtual void remove(Edge edge) = 0;
 
         /// Remove all node and edge.
         virtual void clear() = 0;
@@ -115,27 +120,24 @@ class GraphBase {
         // get information
 
         ///
-        virtual size_t number_of_nodes() const = 0;
+        virtual std::size_t number_of_nodes() const = 0;
 
         ///
-        virtual size_t number_of_edges() const = 0;
+        virtual std::size_t number_of_edges() const = 0;
 
         /// @return index of a edge.
-        virtual size_t edge_to_index(Edge edge) const = 0;
-
-        /// @return edge which index connected.
-        virtual Edge index_to_edge(size_t index) const = 0;
+        virtual std::size_t index(Edge edge) const = 0;
 
         ///
-        virtual Edge first_edge_of_node(Node node) const = 0;
+        virtual Edge start_edge(Node node) const = 0;
 
         /// Move to next edge.
         /// @return false if there is next edge.
-        virtual bool move_to_next(Edge *edge) const = 0;
+        virtual bool to_next(Edge *edge) const = 0;
 
         /// Move to previous edge.
         /// @return whether there is previous edge.
-        virtual bool move_to_prev(Edge *edge) const = 0;
+        virtual bool to_prev(Edge *edge) const = 0;
 
         /// @return head of a edge
         virtual Node head(Edge edge) const = 0;
@@ -143,11 +145,19 @@ class GraphBase {
         /// @return tail of a edge
         virtual Node tail(Edge edge) const = 0;
 
-        /// @return first edge connect head and tail
-        virtual Edge find_first_edge(Node head, Node tail) const = 0;
-
-        /// @return last edge connect head and tail
-        virtual Edge find_last_edge(Node head, Node tail) const = 0;
+        /// @brief Find edges connect head and tail,
+        ///
+        /// @param head source of a edge
+        /// @param tail target of a edge
+        /// @param limit return at most limit edges
+        ///
+        /// @return All edges we find.
+        virtual std::vector<Edge>
+        find_edges(
+            Node head,
+            Node tail,
+            std::size_t limit = SIZE_MAX
+        ) const = 0;
 
 }; // class GraphBase
 
@@ -162,13 +172,13 @@ class GraphBase {
  * @param INDEX Output, the index of the edge we are visiting.
  */
 /* -------------------------------------------------------------------------*/
-#define foredge(GRAPH, HEAD, TAIL, INDEX)                                     \
-    if(bool VAR(go) = false) {} else                                          \
-        for(AUTO(VAR(EDGE), GRAPH.first(HEAD)), VAR(NEXT) = VAR(EDGE);        \
-            GRAPH.next(VAR(NEXT)) and not VAR(go); VAR(EDGE) = VAR(NEXT))     \
-            ASSIGN(INDEX, GRAPH.index(VAR(EDGE)))                         \
-            if(not (VAR(go) = true)) {} else                          \
-                for(AUTO(TAIL, GRAPH.tail(VAR(EDGE)));                    \
+#define foredge(GRAPH, HEAD, TAIL, INDEX)                                      \
+    if(bool VAR(go) = false) {} else                                           \
+        for(AUTO(VAR(EDGE), (GRAPH).start_edge(HEAD)), VAR(NEXT) = VAR(EDGE);  \
+            (GRAPH).to_next(&VAR(NEXT)) and not VAR(go); VAR(EDGE) = VAR(NEXT))\
+            ASSIGN(INDEX, (GRAPH).index(VAR(EDGE)))                            \
+            if(not (VAR(go) = true)) {} else                                   \
+                for(AUTO(TAIL, (GRAPH).tail(VAR(EDGE)));                       \
                     VAR(go) == true; VAR(go) = false)
 
 
