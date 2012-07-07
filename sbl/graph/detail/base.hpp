@@ -4,7 +4,7 @@
 #include<limits>
 #include<cstddef>
 #include<vector>
-#include"../../utility/macro.hpp"
+#include"foredge.hpp"
 #define SIZE_MAX (std::numeric_limits<std::size_t>::max())
 
 
@@ -163,26 +163,6 @@ class GraphBase {
         ) const = 0;
 
 }; // class GraphBase
-
-
-/* -----------------------------------------------------------------------*/
-/**
- * @brief travel a graph from a given head.
- *
- * @param GRAPH Input, the graph we want to travel.
- * @param HEAD Input, the head node of edge.
- * @param TAIL Output, the tail node of edge.
- * @param INDEX Output, the index of the edge we are visiting.
- */
-/* -------------------------------------------------------------------------*/
-#define foredge(GRAPH, HEAD, TAIL, INDEX)                         \
-    for(bool VAR(go) = false) {} else                             \
-        for(AUTO(VAR(EDGE), (GRAPH).begin_edge(HEAD));            \
-            VAR(EDGE) != (GRAPH).end_edge(HEAD);                  \
-            VAR(EDGE) = (GRAPH).next(VAR(EDGE)))                  \
-                ASSIGN(TAIL, (GRAPH).tail(VAR(EDGE)))             \
-                ASSIGN(INDEX, (GRAPH).index(VAR(EDGE)))           \
-
 
 } // namespace sbl
 #endif
