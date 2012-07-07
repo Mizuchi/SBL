@@ -15,89 +15,20 @@ namespace sbl {
  *
  * Design a graph class is not a easy job.
  *
- * Just like CLRS point out that "There is no one best way to store and
- * access vertex and edge attributes." (page 592, 3rd edition). So SBL Graph
- * will not contain any attribute for node and edge. In SBL Graph, nodes and
- * edges could be represented as a unsigned integer. User could map the
- * integer to the attribute they are interested in.
+ * Just like CLRS point out that "There is no one best way to store and access
+ * vertex and edge attributes." (page 592, 3rd edition). So SBL Graph will not
+ * contain any attribute for node and edge. In SBL Graph, nodes and edges could
+ * be represented as a unsigned integer. User could map the integer to the
+ * attribute they are interested in.
  *
- * However, the edge type is not a integer. You have to use member function
- * index() to get the index of a edge. The index is the edge appended
- * ordinal.  The first edge added to the graph has index 0, the second edge
- * has index 1, the third has index 2, etc. Remove any edge would not effect
- * index.  It always automatically increase after add a new edge.
+ * We mapped a edge to its appended ordinal. The first edge added to the graph
+ * is numbered 0, the second edge is numbered 1, the third is numbered 2, etc.
+ * Remove any edge would not effect index.  It always automatically increase
+ * after add a new edge.
  *
  * User could use macro foredge to travel graph.
  */
 class GraphBase {
-    protected:
-        struct EdgeImpl {
-            virtual ~EdgeImpl() {}
-        };
-
-        /// Edge type.
-        class Edge {
-
-                // You can consider edge is a iterator, which will travel all
-                // edge from the head.  User can not control edge directly.
-
-            public:
-                /// User could copy a exist Edge.
-                /// But they can not create a new one.
-                Edge(const Edge &other)
-                    : impl(other.impl), refCount(other.refCount) {
-                    ++refCount;
-                }
-
-                /// User could assign one edge to another.
-                Edge &operator=(const Edge &other) {
-                    Edge newEdge(other);
-                    swap(newEdge);
-                    return *this;
-                }
-
-                ~Edge() {
-                    --refCount;
-                    if (refCount == 0) {
-                        delete refCount;
-                        delete impl;
-                    }
-                }
-            private:
-                // It's not wise to open the API to the user.
-
-                friend class GraphBase;
-
-                /// pimpl
-                EdgeImpl *impl;
-
-                /// Reference counting
-                std::size_t *refCount;
-
-                /// Only GraphBase can construct a Edge.
-                Edge(EdgeImpl *_): impl(_), refCount(new std::size_t(1)) {}
-
-                /// In order to keep it simple and compatible,
-                /// user must use std::swap instead of this member function.
-                void swap(Edge &other) {
-                    std::swap(impl, other.impl);
-                    std::swap(refCount, other.refCount);
-                }
-        };
-
-    protected:
-
-        /// Derived use this function to get a EdgeImpl from edge
-        static EdgeImpl *get_edge_impl(Edge edge) {
-            // Do not delete, don't break reference counting. Use it careful.
-            return edge.impl;
-        }
-
-        /// Derived use this function to create a Edge
-        static Edge make_edge(EdgeImpl *pimpl) {
-            return Edge(pimpl);
-        }
-
     public:
 
         /// NodeType.
@@ -105,16 +36,21 @@ class GraphBase {
         /// Graph. You store any attribute about node yourself.
         typedef std::size_t Node;
 
-        ///
+        /// EdgeType.
+        /// For the sake of convenient, edge is a unsigned integer in SBL
+        /// Graph. Represented as it added order.
+        typedef std::size_t Edge;
+
+        /// 
         virtual ~GraphBase() {}
 
         /// Add a edge from head to tail
-        /// @return the edge we added
+        /// @return the edge just we added
         virtual Edge add_edge(Node head, Node tail) = 0;
 
-        /// Remove a exist edge. if edge is not in the graph, UB.
+        /// Remove a exist edge.
         /// @return whether edge in the graph.
-        virtual void remove(Edge edge) = 0;
+        virtual bool remove(Edge edge) = 0;
 
         /// Remove all node and edge.
         virtual void clear() = 0;
@@ -124,9 +60,6 @@ class GraphBase {
 
         /// @return number of edges in graph.
         virtual std::size_t number_of_edges() const = 0;
-
-        /// @return index of a edge.
-        virtual std::size_t index(Edge edge) const = 0;
 
         /// @return first edge of the graph's node.
         virtual Edge begin_edge(Node node) const = 0;

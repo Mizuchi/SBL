@@ -8,7 +8,7 @@
 
 namespace sbl {
 
-template<class Derived, class Base, class Edge>
+template<class Derived, class Base>
 class GraphCommon: public Base {
         const Derived &self() const {
             return static_cast<const Derived &>(*this);
@@ -17,22 +17,22 @@ class GraphCommon: public Base {
             return static_cast<Derived &>(*this);
         }
     public:
+        typedef std::size_t Node;
+        typedef std::size_t Edge;
 
         // O(|E|)
         std::size_t number_of_edges() const {
             std::size_t result = 0;
             for (std::size_t node = 0; 
                     node < self().number_of_nodes(); node++) {
-                foredge(self(), node, tail, index) {
+                foredge(self(), node, tail, edge) {
                     result++;
                     static_cast<void>(tail);
-                    static_cast<void>(index);
+                    static_cast<void>(edge);
                 }
             }
             return result;
         }
-
-        typedef std::size_t Node;
 
         // O(|E|)
         std::size_t prev(Edge edge) const {
@@ -52,8 +52,8 @@ class GraphCommon: public Base {
         std::size_t head(Edge edge) const {
             for (std::size_t node = 0; 
                     node < self().number_of_nodes(); node++)
-                foredge(self(), node, tail, currentIndex) {
-                if (currentIndex == self().index(edge))
+                foredge(self(), node, tail, index) {
+                if (index == edge)
                     return node;
             }
             assert(false and "GraphCommon::head: edge is not in this graph");

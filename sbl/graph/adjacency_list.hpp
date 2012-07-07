@@ -7,7 +7,7 @@
 
 namespace sbl {
 class AdjacencyList:
-    public GraphCommon<AdjacencyList, EmptyBase, size_t> {
+    public GraphCommon<AdjacencyList, EmptyBase> {
     public:
         typedef size_t Edge;
         typedef size_t Node;
@@ -26,10 +26,6 @@ class AdjacencyList:
         std::vector<LinkNode> link;
         mutable std::vector<size_t> info;
 
-        static Edge make_edge(size_t index) {
-            return index;
-        }
-
         void expand(size_t node) const {
             if (info.size() <= node)
                 info.resize(node + 1, sentinel);
@@ -41,16 +37,16 @@ class AdjacencyList:
             expand(head);
             link.push_back(LinkNode(info[head], tail));
             info[head] = link.size() - 1;
-            return make_edge(info[head]);
+            return info[head];
         }
 
         void remove(Edge edge) {
             size_t headNode = head(edge);
-            size_t nextIndex = link[index(edge)].next;
+            size_t nextEdge = link[edge].next;
             if (prev(edge) == end_edge(headNode)) {
-                info[headNode] = nextIndex;
+                info[headNode] = nextEdge;
             } else {
-                link[prev(edge)].next = nextIndex;
+                link[prev(edge)].next = nextEdge;
             }
         }
 
@@ -67,28 +63,21 @@ class AdjacencyList:
             return link.size();
         }
 
-        std::size_t index(Edge edge) const {
-            return edge;
-        }
-
         Edge begin_edge(Node head) const {
             expand(head);
-            return make_edge(info[head]);
+            return info[head];
         }
 
         Edge end_edge(Node node) const {
-            return make_edge(sentinel);
+            return sentinel;
         }
 
         Edge next(Edge edge) const {
-            size_t idx = index(edge);
-            size_t nextIdx = link[idx].next;
-            return make_edge(nextIdx);
+            return link[edge].next;
         }
 
         Node tail(Edge edge) const {
-            size_t idx = index(edge);
-            return link[idx].tail;
+            return link[edge].tail;
         }
 };
 
