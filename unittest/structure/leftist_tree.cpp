@@ -22,8 +22,7 @@ TEST(structure, leftist_tree) {
 };
 
 struct Node {
-    Node *leftChild, *rightChild;
-    int npl;
+    sbl::intrusive::LeftistTreeNode<Node*> node;
     bool compare(Node *other) {
         return value < other->value;
     }

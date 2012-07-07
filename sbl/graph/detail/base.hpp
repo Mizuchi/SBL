@@ -11,25 +11,25 @@
 
 namespace sbl {
 
-/// @brief GraphBase
-///
-/// Design a graph class is not a easy job.
-///
-/// Just like CLRS point out that "There is no one best way to store and
-/// access vertex and edge attributes." (page 592, 3rd edition). So SBL Graph
-/// will not contain any attribute for node and edge. In SBL Graph, nodes and
-/// edges could be represented as a unsigned integer. User could map the
-/// integer to the attribute they are interested in.
-///
-/// However, the edge type is not a integer. You have to use member function
-/// index() to get the index of a edge. The index is the edge appended
-/// ordinal.  The first edge added to the graph has index 0, the second edge
-/// has index 1, the third has index 2, etc. Remove any edge would not effect
-/// index.  It always automatically increase after add a new edge.
-///
-/// User could use macro foredge to travel graph.
+/** @brief GraphBase
+ *
+ * Design a graph class is not a easy job.
+ *
+ * Just like CLRS point out that "There is no one best way to store and
+ * access vertex and edge attributes." (page 592, 3rd edition). So SBL Graph
+ * will not contain any attribute for node and edge. In SBL Graph, nodes and
+ * edges could be represented as a unsigned integer. User could map the
+ * integer to the attribute they are interested in.
+ *
+ * However, the edge type is not a integer. You have to use member function
+ * index() to get the index of a edge. The index is the edge appended
+ * ordinal.  The first edge added to the graph has index 0, the second edge
+ * has index 1, the third has index 2, etc. Remove any edge would not effect
+ * index.  It always automatically increase after add a new edge.
+ *
+ * User could use macro foredge to travel graph.
+ */
 class GraphBase {
-
     protected:
         struct EdgeImpl {
             virtual ~EdgeImpl() {}

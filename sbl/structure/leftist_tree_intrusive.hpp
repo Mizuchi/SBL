@@ -8,31 +8,51 @@ namespace intrusive {
  *
  * User must provide the node type, manage the memory, and guarantee:
  *
- * Member variant NodePtr leftChild record left child
+ * Member variant LeftistTreeNode<NodePtr> node record the information.
  *
- * Member variant NodePtr rightChild record right child
- *
- * Member variant size_t npl record the null path length
- *
- * Member function compare two NodePtr
+ * Member function bool less_than(NodePtr other) to use for all comparisons
+ * of keys
  */
+
+template<class NodePtr> class LeftistTree;
+
+template<class NodePtr>
+class LeftistTreeNode {
+        friend class LeftistTree<NodePtr>;
+        NodePtr leftChild, rightChild;
+        size_t nullPathLength;
+};
+
 template <class NodePtr>
 class LeftistTree {
     private:
-
-        std::size_t get_length(NodePtr a) {
-            if (a == NULL) return 0;
-            return a->npl;
+        LeftistTreeNode<NodePtr> &get_node(NodePtr s) {
+            return s->node;
+        }
+        NodePtr &l(NodePtr a) {
+            return get_node(a).leftChild;
+        }
+        NodePtr &r(NodePtr a) {
+            return get_node(a).rightChild;
+        }
+        size_t &npl(NodePtr a) {
+            static size_t zero = 0;
+            if (a == NULL)
+                return zero;
+            else
+                return get_node(a).nullPathLength;
         }
 
         NodePtr bind(NodePtr a, NodePtr b) {
             if (a == NULL) return b;
             if (b == NULL) return a;
             if (a->compare(b)) std::swap(a, b);
-            a->rightChild = bind(a->rightChild, b);
-            if (get_length(a->leftChild) < get_length(a->rightChild))
-                std::swap(a->leftChild, a->rightChild);
-            a->npl = get_length(a->rightChild) + 1;
+
+            r(a) = bind(r(a), b);
+
+            if (npl(l(a)) < npl(r(a)))
+                std::swap(l(a), r(a));
+            npl(a) = npl(r(a)) + 1;
             return a;
         }
         NodePtr root;
@@ -40,14 +60,14 @@ class LeftistTree {
         LeftistTree(): root(0) {}
 
         void push(NodePtr a) {
-            a->leftChild = a->rightChild = NULL;
-            a->npl = 0;
+            l(a) = r(a) = NULL;
+            npl(a) = 0;
             root = bind(root, a);
         }
 
         NodePtr pop() {
             NodePtr p = root;
-            root = bind(root->leftChild, root->rightChild);
+            root = bind(l(root), r(root));
             return p;
         }
 
@@ -64,6 +84,7 @@ class LeftistTree {
             root = NULL;
         }
 };
+
 } // namespace intrusive
 } // namespace sbl
 #endif
