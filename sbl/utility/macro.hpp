@@ -17,6 +17,12 @@
 
 #define ASSIGN(LHS, RHS)                                                   \
     if (bool VAR(stop) = false) {} else                                    \
-        for (AUTO(LHS, (RHS)); VAR(stop) == false; VAR(stop) = true)
+        for (LHS = RHS; VAR(stop) == false; VAR(stop) = true)
+
+#define ASSIGN_AUTO(LHS, RHS) ASSIGN(TYPEOF(RHS) LHS, RHS)
+
+#define BREAKED() VAR(breaked)
+#define FOREACH_BEGIN() if (bool BREAKED() = false) {} else
+#define FOREACH_END()   for (BREAKED() = true; BREAKED(); BREAKED() = false) 
 
 #endif 

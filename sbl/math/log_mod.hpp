@@ -34,7 +34,7 @@ template<class T> T log_mod(T x, T y, T z) {
     // Then (result = i * sqrt(z) + j) is what we are looking for.
     //
     
-    assert(isprime(z));
+    // assert(isprime(z));
     x %= z;
     y %= z;
     T sqrtOfZ = integer_sqrt(z);

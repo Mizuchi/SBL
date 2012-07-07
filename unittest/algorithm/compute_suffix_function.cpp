@@ -1,3 +1,4 @@
+#include"../../sbl/base.hpp"
 #include"../../sbl/algorithm/compute_suffix_function.hpp"
 #include<string>
 

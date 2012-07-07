@@ -3,22 +3,22 @@
 #include"macro.hpp"
 
 #define FOREACH_ITERATOR(CONTAINER)                                        \
-    if (bool VAR(go) = false) {} else                                      \
+    FOREACH_BEGIN()                                                        \
         for (AUTO(VAR(i), (CONTAINER).begin());                            \
-                VAR(go) == false and VAR(i) != (CONTAINER).end(); ++VAR(i))
+                VAR(i) != (CONTAINER).end() and not BREAKED(); ++VAR(i))
 
 #define FOREACH_ITERATOR_REVERSE(CONTAINER)                                \
-    if (bool VAR(go) = false) {} else                                      \
+    FOREACH_BEGIN()                                                        \
         for (AUTO(VAR(i), (CONTAINER).end());                              \
-                VAR(go) == false and VAR(i)-- != (CONTAINER).begin();)
+                VAR(i)-- != (CONTAINER).begin() and not BREAKED();)
 
 #define FOREACH_VALUE(VALUE)                                               \
-    if (not(VAR(go) = true)) {} else                                       \
-        for (VALUE = *VAR(i); VAR(go) == true; VAR(go) = false)    
+    ASSIGN(VALUE, *VAR(i))                                                 \
+        FOREACH_END()                                                  
 
 #define FOREACH_VALUE_AUTO(VALUE)                                          \
-    if (not(VAR(go) = true)) {} else                                       \
-        for (AUTO(VALUE, *VAR(i)); VAR(go) == true; VAR(go) = false) 
+    ASSIGN_AUTO(VALUE, *VAR(i))                                            \
+        FOREACH_END()                                                  
 
 #define foreach(VALUE, CONTAINER)                                          \
     FOREACH_ITERATOR(CONTAINER)                                            \

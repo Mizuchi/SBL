@@ -15,19 +15,21 @@ namespace sbl {
 ///
 /// Design a graph class is not a easy job.
 ///
-/// Just like CLRS point out that there is no generic way to store a attribute
-/// to a edge or node. So SBL Graph will not contain any attribute for node and
-/// edge. In SBL Graph, nodes and edges could be represented as a unsigned
-/// integer. User could map the integer to the attribute they are interested in.
+/// Just like CLRS point out that "There is no one best way to store and
+/// access vertex and edge attributes." (page 592, 3rd edition). So SBL Graph
+/// will not contain any attribute for node and edge. In SBL Graph, nodes and
+/// edges could be represented as a unsigned integer. User could map the
+/// integer to the attribute they are interested in.
 ///
 /// However, the edge type is not a integer. You have to use member function
-/// index() to get the index of a edge. The index is the edge appended ordinal.
-/// The first edge added to the graph has index 0, the second edge has index 1,
-/// the third has index 2, etc. Remove any edge would not effect index.  It
-/// always automatically increase after add a new edge.
+/// index() to get the index of a edge. The index is the edge appended
+/// ordinal.  The first edge added to the graph has index 0, the second edge
+/// has index 1, the third has index 2, etc. Remove any edge would not effect
+/// index.  It always automatically increase after add a new edge.
 ///
 /// User could use macro foredge to travel graph.
 class GraphBase {
+
     protected:
         struct EdgeImpl {
             virtual ~EdgeImpl() {}
@@ -117,27 +119,28 @@ class GraphBase {
         /// Remove all node and edge.
         virtual void clear() = 0;
 
-        // get information
-
-        ///
+        /// @return number of nodes in graph.
         virtual std::size_t number_of_nodes() const = 0;
 
-        ///
+        /// @return number of edges in graph.
         virtual std::size_t number_of_edges() const = 0;
 
         /// @return index of a edge.
         virtual std::size_t index(Edge edge) const = 0;
 
-        ///
-        virtual Edge start_edge(Node node) const = 0;
+        /// @return first edge of the graph's node.
+        virtual Edge begin_edge(Node node) const = 0;
+
+        /// @return edge that following the last edge of the graph's node.
+        virtual Edge end_edge(Node node) const = 0;
 
         /// Move to next edge.
         /// @return false if there is next edge.
-        virtual bool to_next(Edge *edge) const = 0;
+        virtual Edge next(Edge edge) const = 0;
 
         /// Move to previous edge.
         /// @return whether there is previous edge.
-        virtual bool to_prev(Edge *edge) const = 0;
+        virtual Edge prev(Edge edge) const = 0;
 
         /// @return head of a edge
         virtual Node head(Edge edge) const = 0;
@@ -172,14 +175,13 @@ class GraphBase {
  * @param INDEX Output, the index of the edge we are visiting.
  */
 /* -------------------------------------------------------------------------*/
-#define foredge(GRAPH, HEAD, TAIL, INDEX)                                      \
-    if(bool VAR(go) = false) {} else                                           \
-        for(AUTO(VAR(EDGE), (GRAPH).start_edge(HEAD)), VAR(NEXT) = VAR(EDGE);  \
-            (GRAPH).to_next(&VAR(NEXT)) and not VAR(go); VAR(EDGE) = VAR(NEXT))\
-            ASSIGN(INDEX, (GRAPH).index(VAR(EDGE)))                            \
-            if(not (VAR(go) = true)) {} else                                   \
-                for(AUTO(TAIL, (GRAPH).tail(VAR(EDGE)));                       \
-                    VAR(go) == true; VAR(go) = false)
+#define foredge(GRAPH, HEAD, TAIL, INDEX)                         \
+    for(bool VAR(go) = false) {} else                             \
+        for(AUTO(VAR(EDGE), (GRAPH).begin_edge(HEAD));            \
+            VAR(EDGE) != (GRAPH).end_edge(HEAD);                  \
+            VAR(EDGE) = (GRAPH).next(VAR(EDGE)))                  \
+                ASSIGN(TAIL, (GRAPH).tail(VAR(EDGE)))             \
+                ASSIGN(INDEX, (GRAPH).index(VAR(EDGE)))           \
 
 
 } // namespace sbl
