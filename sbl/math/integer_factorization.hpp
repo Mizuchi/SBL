@@ -11,13 +11,12 @@
 
 namespace sbl {
 /// @brief factorize a given integer
-///
 /// \post \prod{k^{result[k]}} = n
 
 template<class T>
-std::map<T, T> factorize_integer(T n) {
+std::map<T, size_t> factorize_integer(T n) {
     // http://en.wikipedia.org/wiki/Trial_division
-    std::map<T, T> result;
+    std::map<T, size_t> result;
     for (T i = 2; i <= integer_sqrt(n); i++)
         while (n % i == 0) {
             n /= i;
@@ -35,6 +34,7 @@ std::map<T, T> factorize_integer(T n) {
 /// \post result < n
 /// \post n % result == 0
 template<class T> T get_divisor(T n) {
+    assert(n > 1);
     if (n % 2 == 0) return 2;
     assert(!isprime(n));
     for (T c(1); true; ++c) {

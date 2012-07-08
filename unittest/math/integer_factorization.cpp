@@ -1,10 +1,12 @@
 #include"../../sbl/math/integer_factorization.hpp"
+#include"../../sbl/base.hpp"
+#include<gtest/gtest.h>
 
 TEST(math, integer_factorization) {
     using namespace sbl;
     using namespace std;
 
-    map<int, int> x = factorize_integer(1001);
+    AUTO(x, factorize_integer(1001));
     EXPECT_EQ(x.size(), 3);
     EXPECT_EQ(x[7], 1);
     EXPECT_EQ(x[11], 1);
@@ -32,7 +34,7 @@ TEST(math, integer_factorization2) {
     using namespace sbl;
     using namespace std;
 
-    map<int, int> x = factorize_integer(100);
+    AUTO(x, factorize_integer(100));
     EXPECT_EQ(x.size(), 2);
     EXPECT_EQ(x[2], 2);
     EXPECT_EQ(x[5], 2);
