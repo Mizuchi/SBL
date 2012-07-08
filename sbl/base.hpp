@@ -17,8 +17,9 @@ namespace sbl {
     } while(false)
 
 /// Return run time for this thread in second.
-static double spend_time() {
+static inline double spend_time() {
     return double(clock()) / CLOCKS_PER_SEC;
+    static_cast<void>(spend_time);
 }
 } // namespace sbl
 #endif

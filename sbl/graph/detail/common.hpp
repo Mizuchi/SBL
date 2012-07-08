@@ -23,8 +23,8 @@ class GraphCommon: public Base {
         // O(|E|)
         std::size_t number_of_edges() const {
             std::size_t result = 0;
-            for (std::size_t node = 0; 
-                    node < self().number_of_nodes(); node++) {
+            for (std::size_t node = 0;
+                 node < self().number_of_nodes(); node++) {
                 foredge(self(), node, tail, edge) {
                     result++;
                     static_cast<void>(tail);
@@ -50,11 +50,13 @@ class GraphCommon: public Base {
 
         // O(|E|)
         std::size_t head(Edge edge) const {
-            for (std::size_t node = 0; 
-                    node < self().number_of_nodes(); node++)
+            for (std::size_t node = 0;
+                 node < self().number_of_nodes(); node++) {
                 foredge(self(), node, tail, index) {
-                if (index == edge)
-                    return node;
+                    if (index == edge)
+                        return node;
+                    static_cast<void>(tail);
+                }
             }
             assert(false and "GraphCommon::head: edge is not in this graph");
         }
