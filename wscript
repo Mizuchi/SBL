@@ -87,7 +87,7 @@ def unittest(bld):
     bld.program(
         source='test.cpp',
         target='test',
-        CXXFLAGS='-Wall',
+        cxxflags=['-Wall', '-Werror'],
         use='gtest',
     )
     bld(
