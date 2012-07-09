@@ -92,10 +92,10 @@ class OrderStatisticTree {
         ///
         /// @return const reference of child
         const NodePtr &child(NodePtr a, size_t idx) const {
+            assert(idx == 0 or idx == 1);
             static const NodePtr kNullPtr = NULL;
             if (a == NULL) return kNullPtr;
             return get_node(a).child[idx];
-            assert(false && "OrderStatisticTree:: subscript range error");
         }
 
         /// get the reference of child according index.
@@ -106,8 +106,8 @@ class OrderStatisticTree {
         /// @return reference of child
         NodePtr &child_references(NodePtr a, size_t idx) {
             assert(a != NULL);
+            assert(idx == 0 or idx == 1);
             return get_node(a).child[idx];
-            assert(false and "OrderStatisticTree:: subscript range error");
         }
 
         /// change child
@@ -125,18 +125,57 @@ class OrderStatisticTree {
         const NodePtr &r(NodePtr a) const {
             return child(a, 1);
         }
+        /// get the left child from a NodePtr
+        const NodePtr &get_left(NodePtr a) const {
+            return l(a);
+        }
+
+        /// get the right child from a NodePtr
+        const NodePtr &get_right(NodePtr a) const {
+            return r(a);
+        }
+
+        void set_left(NodePtr a, NodePtr x) {
+            set_child(a, 0, x);
+        }
+
+        void set_right(NodePtr a, NodePtr x) {
+            set_child(a, 1, x);
+        }
 
         /// update the size of current NodePtr
         void update_size(NodePtr a) {
             set_size(a, size(l(a)) + size(r(a)) + 1);
         }
 
-        /// Swap a NodePtr with her father.
+        NodePtr left_rotate(NodePtr x) {
+            // Introduction to Algorithm 2nd edition P276
+            if(get_right(x) == NULL) return NULL;
+            NodePtr y = get_right(x);
+            NodePtr b = get_left(y);
+            set_right(x, b);
+            set_left(y, x);
+            return y;
+        }
+
+        NodePtr right_rotate(NodePtr y) {
+            // Introduction to Algorithm 2nd edition P276
+            if(get_left(y) == NULL) return NULL;
+            NodePtr x = get_left(y);
+            NodePtr b = get_right(x);
+            set_left(y, b);
+            set_right(x, y);
+            return x;
+        }
+
+        /// Swap a NodePtr with his daughter
         NodePtr rotate(NodePtr t, size_t idx) {
             assert(idx == 0 or idx == 1);
-            NodePtr s = child(t, idx);
-            set_child(t, idx, child(s, 1 - idx));
-            set_child(s, 1 - idx, t);
+            NodePtr s;
+            if(idx == 0)
+                s = right_rotate(t);
+            else
+                s = left_rotate(t);
             update_size(t);
             update_size(s);
             return s;
