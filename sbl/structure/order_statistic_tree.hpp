@@ -8,23 +8,17 @@
  * tree.
  *
  * User must provide the node type, manage the memory, and guarantee:
- *
- * Member variant OrderStatisticTreeNode<NodePtr> node record the
- * information.
- *
- * Member function bool less_than(NodePtr other) to use for all comparisons
- * of keys
  */
 
 namespace sbl {
 namespace intrusive {
 
-template < class NodePtr >
+template < class NodePtr, class GetNode >
 class OrderStatisticTree;
 
 template<class NodePtr>
 class OrderStatisticTreeNode {
-        friend class OrderStatisticTree<NodePtr>;
+        template<class, class> friend class OrderStatisticTree;
         NodePtr child[2];
         size_t size;
         size_t priority;
@@ -49,20 +43,21 @@ class OrderStatisticTreeNode {
  * @tparam NodePtr a pointer to the node which defined by user.
  */
 
-template < class NodePtr >
+template < class NodePtr, class GetNode>
 class OrderStatisticTree {
         /// This data structure implement by using Treap.
         /// Treap is a binary search tree.
     private:
 
+        GetNode getNode;
         /// get the node information from NodePtr
         OrderStatisticTreeNode<NodePtr> &get_node(NodePtr a) {
-            return a->node;
+            return getNode(a);
         }
 
         /// get the node information from NodePtr, const version
         const OrderStatisticTreeNode<NodePtr> &get_node(NodePtr a) const {
-            return a->node;
+            return getNode(a);
         }
 
         /// @return number of nodes in subtree a.

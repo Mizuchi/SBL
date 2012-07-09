@@ -11,9 +11,16 @@ struct NodeOST {
     NodeOST(int _): value(_) {}
 };
 
+struct GetNodeOST {
+    sbl::intrusive::OrderStatisticTreeNode<NodeOST *> &
+    operator()(NodeOST *a) const {
+        return a->node;
+    }
+};
+
 TEST(structure, OrderStatisticTree) {
     std::list<NodeOST> p;
-    sbl::intrusive::OrderStatisticTree<NodeOST *> tree;
+    sbl::intrusive::OrderStatisticTree<NodeOST *, GetNodeOST> tree;
     p.push_back(2), tree.insert(&p.back());
     p.push_back(3), tree.insert(&p.back());
     p.push_back(5), tree.insert(&p.back());
