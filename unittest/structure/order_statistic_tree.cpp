@@ -4,11 +4,14 @@
 
 struct NodeOST {
    sbl::OrderStatisticTreeNode<NodeOST *> node;
-   int value;
-   bool less_than(const NodeOST *x) const {
-       return value < x->value;
-   }
    NodeOST(int _): value(_) {}
+   int value;
+};
+
+struct Compare {
+    bool operator()(NodeOST* a, NodeOST*b) const {
+        return a->value < b->value;
+    }
 };
 
 struct GetNodeOST {
@@ -20,7 +23,7 @@ struct GetNodeOST {
 
 TEST(structure, OrderStatisticTree) {
    std::list<NodeOST> p;
-   sbl::OrderStatisticTree<NodeOST *, GetNodeOST> tree;
+   sbl::OrderStatisticTree<NodeOST *, GetNodeOST, Compare> tree;
    p.push_back(3), tree.insert(&p.back());
    p.push_back(5), tree.insert(&p.back());
    p.push_back(2), tree.insert(&p.back());

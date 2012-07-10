@@ -13,12 +13,12 @@
 
 namespace sbl {
 
-template<class NodePtr, class GetNode>
+template<class NodePtr, class GetNode, class Compare>
 class OrderStatisticTree;
 
 template<class NodePtr>
 class OrderStatisticTreeNode {
-        template<class, class> friend class OrderStatisticTree;
+        template<class, class, class> friend class OrderStatisticTree;
     public:
         ::sbl::detail::SplayTreeNode<NodePtr> node;
         size_t size;
@@ -36,13 +36,14 @@ class OrderStatisticTreeNode {
  * @tparam NodePtr a pointer to the node which defined by user.
  */
 
-template < class NodePtr, class GetNode>
+template < class NodePtr, class GetNode, class Compare>
 class OrderStatisticTree {
         /// This data structure implement by using Treap.
         /// Treap is a binary search tree.
     private:
         NodePtr root;
-        typedef OrderStatisticTree<NodePtr, GetNode> Self;
+        Compare compare;
+        typedef OrderStatisticTree<NodePtr, GetNode, Compare> Self;
 
         struct Update {
             void operator()(NodePtr parent, NodePtr left, NodePtr right) const {
@@ -100,10 +101,11 @@ class OrderStatisticTree {
         struct ThreeWay {
             NodePtr x;
             int operator()(NodePtr y) const {
-                if (x->less_than(y)) return -1;
-                if (y->less_than(x)) return +1;
+                if (compare(x, y)) return -1;
+                if (compare(y, x)) return +1;
                 return 0;
             }
+            Compare compare;
             ThreeWay(NodePtr _): x(_) {}
         };
 
@@ -156,9 +158,10 @@ class OrderStatisticTree {
         struct Smaller3Way {
             NodePtr store;
             int operator()(NodePtr current) const {
-                if (current->less_than(store)) return 1;
+                if (compare(current,store)) return 1;
                 return -1;
             }
+            Compare compare;
             Smaller3Way(NodePtr _): store(_) {}
         };
     public:
@@ -168,14 +171,14 @@ class OrderStatisticTree {
             root = st.find(root, Smaller3Way(x));
             assert(x != NULL);
             assert(root != NULL);
-            if (root->less_than(x))
+            if (compare(root, x))
                 return root;
             else {
                 // half change to splay the bigger one.
                 root = st.find(root, Smaller3Way(x));
                 assert(x != NULL);
                 assert(root != NULL);
-                if (root->less_than(x))
+                if (compare(root, x))
                     return root;
                 else
                     return NULL;
@@ -186,10 +189,11 @@ class OrderStatisticTree {
         struct Bigger3Way {
             NodePtr store;
             int operator()(NodePtr current) const {
-                if (store->less_than(current))
+                if (compare(store,current))
                     return -1;
                 return 1;
             }
+            Compare compare;
             Bigger3Way(NodePtr _): store(_) {}
         };
     public:
@@ -199,14 +203,14 @@ class OrderStatisticTree {
             root = st.find(root, Bigger3Way(x));
             assert(x != NULL);
             assert(root != NULL);
-            if (x->less_than(root))
+            if (compare(x, root))
                 return root;
             else {
                 // half change to splay the smaller one.
                 root = st.find(root, Bigger3Way(x));
                 assert(x != NULL);
                 assert(root != NULL);
-                if (x->less_than(root))
+                if (compare(x, root))
                     return root;
                 else
                     return NULL;
