@@ -1,6 +1,7 @@
 #ifndef _sbl_leftist_tree
 #define _sbl_leftist_tree
-#include<algorithm>
+#include<cassert>
+#include<cstddef>
 namespace sbl {
 
 /** \brief This is a intrusive data structure version of leftist tree.
@@ -13,45 +14,70 @@ namespace sbl {
  * of keys
  */
 
-template<class NodePtr> class LeftistTree;
+template <class NodePtr, class GetNode, class Compare>
+class LeftistTree;
 
 template<class NodePtr>
 class LeftistTreeNode {
-        friend class LeftistTree<NodePtr>;
+    private:
+        template<class, class, class> friend class LeftistTree;
         NodePtr leftChild, rightChild;
-        size_t nullPathLength;
+        std::size_t nullPathLength;
+    public:
+        LeftistTreeNode()
+            : leftChild(NULL), rightChild(NULL), nullPathLength(0) {}
 };
 
-template <class NodePtr>
+template <class NodePtr, class GetNode, class Compare>
 class LeftistTree {
     private:
-        LeftistTreeNode<NodePtr> &get_node(NodePtr s) {
-            return s->node;
+        Compare compare;
+        static LeftistTreeNode<NodePtr> &get_node(NodePtr s) {
+            assert(s != NULL);
+            GetNode getNode;
+            return getNode(s);
         }
-        NodePtr &l(NodePtr a) {
+        static NodePtr get_left(NodePtr a) {
             return get_node(a).leftChild;
         }
-        NodePtr &r(NodePtr a) {
+        static void set_left(NodePtr a, NodePtr b) {
+            if (a == NULL) return;
+            get_node(a).leftChild = b;
+        }
+        static NodePtr get_right(NodePtr a) {
             return get_node(a).rightChild;
         }
-        size_t &npl(NodePtr a) {
-            static size_t zero = 0;
-            if (a == NULL)
-                return zero;
-            else
-                return get_node(a).nullPathLength;
+        static void set_right(NodePtr a, NodePtr b) {
+            if (a == NULL) return;
+            get_node(a).rightChild = b;
+        }
+
+        static std::size_t get_npl(NodePtr a) {
+            if (a == NULL)return 0;
+            return get_node(a).nullPathLength;
+        }
+        static void set_npl(NodePtr a, std::size_t value) {
+            if (a == NULL)return ;
+            get_node(a).nullPathLength = value;
         }
 
         NodePtr bind(NodePtr a, NodePtr b) {
             if (a == NULL) return b;
             if (b == NULL) return a;
-            if (a->compare(b)) std::swap(a, b);
+            if (compare(a, b)) {
+                NodePtr swapTmp = a;
+                a = b;
+                b = swapTmp;
+            }
 
-            r(a) = bind(r(a), b);
+            set_right(a, bind(get_right(a), b));
 
-            if (npl(l(a)) < npl(r(a)))
-                std::swap(l(a), r(a));
-            npl(a) = npl(r(a)) + 1;
+            if (get_npl(get_left(a)) < get_npl(get_right(a))) {
+                NodePtr swapTmp = get_left(a);
+                set_left(a, get_right(a));
+                set_right(a, swapTmp);
+            }
+            set_npl(a, get_npl(get_right(a)) + 1);
             return a;
         }
         NodePtr root;
@@ -59,14 +85,12 @@ class LeftistTree {
         LeftistTree(): root(0) {}
 
         void push(NodePtr a) {
-            l(a) = r(a) = NULL;
-            npl(a) = 0;
             root = bind(root, a);
         }
 
         NodePtr pop() {
             NodePtr p = root;
-            root = bind(l(root), r(root));
+            root = bind(get_left(root), get_right(root));
             return p;
         }
 

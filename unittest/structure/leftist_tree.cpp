@@ -3,18 +3,28 @@
 #include<algorithm>
 #include<vector>
 
-struct Node {
-    sbl::LeftistTreeNode<Node*> node;
-    bool compare(Node *other) {
-        return value < other->value;
-    }
+struct NodeLT {
+    sbl::LeftistTreeNode<NodeLT *> node;
     int value;
-    Node(int s): value(s) {}
+    NodeLT(int s): value(s) {}
+};
+
+struct CompareLT  {
+    bool operator()(NodeLT *a, NodeLT *b) {
+        return a->value < b->value;
+    }
+};
+
+struct GetNodeLT {
+    sbl::LeftistTreeNode<NodeLT *> &
+    operator()(NodeLT* a) const {
+        return a->node;
+    }
 };
 
 TEST(structure, leftist_tree_intrusive) {
-    sbl::LeftistTree<Node *> a, b;
-    Node x[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    sbl::LeftistTree<NodeLT *, GetNodeLT, CompareLT> a, b;
+    NodeLT x[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     b.push(x + 5);
     b.push(x + 4);
     b.push(x + 2);
