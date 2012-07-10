@@ -24,12 +24,12 @@ class SplayTree {
         //    * Since we can not be allocated memory, we have no dummy node
     public:
         /// get the node information from NodePtr
-
         static SplayTreeNode<NodePtr> &get_node(NodePtr a) {
             assert(a != NULL);
             return GetNode()(a);
         }
 
+        /// get the child according index {0: left, 1: right}
         static NodePtr get_child(NodePtr a, size_t idx) {
             assert(idx == 0 or idx == 1);
             if (idx == 0)
@@ -37,6 +37,8 @@ class SplayTree {
             else
                 return get_right(a);
         }
+
+        /// set the child according index {0: left, 1: right}
         static void set_child(NodePtr a, size_t idx, NodePtr b) {
             assert(idx == 0 or idx == 1);
             if (idx == 0)
@@ -45,36 +47,43 @@ class SplayTree {
                 set_right(a, b);
         }
 
+        /// get left child
         static NodePtr get_left(NodePtr a) {
             if (a == NULL) return NULL;
             return get_node(a).left;
         }
 
+        /// set left child
         static void set_left(NodePtr a, NodePtr b) {
             if (a == NULL) return ;
             get_node(a).left = b;
         }
 
+        /// get right child
         static NodePtr get_right(NodePtr a) {
             if (a == NULL) return NULL;
             return get_node(a).right;
         }
 
+        /// set right child
         static void set_right(NodePtr a, NodePtr b) {
             if (a == NULL) return ;
             get_node(a).right = b;
         }
 
+        /// get parent
         static NodePtr get_parent(NodePtr a) {
             if (a == NULL)return NULL;
             return get_node(a).parent;
         }
 
+        /// set parent
         static void set_parent(NodePtr a, NodePtr b) {
             if (a == NULL) return ;
             get_node(a).parent = b;
         }
 
+        /// check if x is a right child
         static bool is_right(NodePtr x) {
             assert(x != NULL);
             NodePtr y = get_parent(x);
@@ -82,34 +91,30 @@ class SplayTree {
             return get_right(y) == x;
         }
 
+        /// check if x is a left child
         static bool is_left(NodePtr x) {
-            assert(x != NULL);
-            NodePtr y = get_parent(x);
-            if (y == NULL) return false;
-            return get_left(y) == x;
+            return not is_right(x);
         }
 
-        static void expand(NodePtr x, NodePtr l, NodePtr r) {
-            return Expand()(x, l, r);
+        static void expand(NodePtr parent, NodePtr left, NodePtr right) {
+            return Expand()(parent, left, right);
         }
 
-        static void update(NodePtr x, NodePtr l, NodePtr r) {
-            //cout << "===============================" << endl;
-            //std::cout << ::acml::json::dumps(x) << std::endl;
-            //std::cout << ::acml::json::dumps(l) << std::endl;
-            //std::cout << ::acml::json::dumps(r) << std::endl;
-            //cout << "===============================" << endl;
-            return Update()(x, l, r);
+        static void update(NodePtr parent, NodePtr left, NodePtr right) {
+            return Update()(parent, left, right);
         }
 
+        /// expand node x information to his children
         static void expand(NodePtr x) {
             expand(x, get_left(x), get_right(x));
         }
 
+        /// update node x information from his children
         static void update(NodePtr x) {
             update(x, get_left(x), get_right(x));
         }
 
+        /// swap x to her father
         static void rotate(NodePtr x) {
             NodePtr y = get_parent(x);
             if (get_parent(y) != NULL) {
@@ -126,11 +131,11 @@ class SplayTree {
             set_child(x, 1 - c, y);
             set_parent(y, x);
 
-
             update(y);
             update(x);
         }
 
+        /// splay t to the root
         static void splay(NodePtr t) {
             while (get_parent(t) != NULL) {
                 NodePtr y = get_parent(t);
@@ -152,6 +157,12 @@ class SplayTree {
             }
         }
 
+        /// add a new node to root according compare.
+        /// compare must given a NodePtr and return {-1, 0, 1}
+        /// -1: current node bigger, to the left subtree
+        /// 0: current node equal to x, to the right subtree
+        /// 1: current node smaller, to the right subtree
+        /// @return new root
         template<class Compare3way>
         static NodePtr add(NodePtr root, NodePtr node, Compare3way compare) {
             if (root == NULL)
@@ -182,21 +193,27 @@ class SplayTree {
             return node;
         }
 
+    private:
         template<int n>
         struct AlwaysReturn {
             int operator()(...) {
                 return n;
             }
         };
+    public:
 
+        /// splay the leftmost node
         static NodePtr leftmost(NodePtr root) {
-            return find(root, AlwaysReturn<1>());
+            return find(root, AlwaysReturn<-1>());
         }
 
+        /// splay the rightmost node
         static NodePtr rightmost(NodePtr root) {
             return find(root, AlwaysReturn<1>());
         }
 
+        /// delete the root
+        /// @return new root
         static NodePtr del(NodePtr root) {
             if (root == NULL)
                 return root;
@@ -215,7 +232,7 @@ class SplayTree {
             if (left == NULL) {
                 return right;
             } else {
-                left = leftmost(left);
+                left = rightmost(left);
                 assert(get_right(left) == NULL);
                 set_right(left, right);
                 set_parent(right, left);
@@ -224,6 +241,12 @@ class SplayTree {
             }
         }
 
+        /// find a node according Compare3way compare.
+        /// compare must given a NodePtr and return {-1, 0, 1}
+        /// -1: to the left subtree
+        /// 0: we found it !!! splay it to the root!
+        /// 1: to the right subtree
+        /// @return new root (the node we found)
         template<class Compare3way>
         static NodePtr find(NodePtr root, Compare3way compare) {
             if (root == NULL)
