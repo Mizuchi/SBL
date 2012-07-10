@@ -1,28 +1,10 @@
 #include<gtest/gtest.h>
 #include"../../sbl/structure/leftist_tree.hpp"
-#include"../../sbl/structure/leftist_tree_intrusive.hpp"
 #include<algorithm>
 #include<vector>
 
-TEST(structure, leftist_tree) {
-    sbl::LeftistTree<int> a, b;
-    b.push(5);
-    b.push(4);
-    b.push(2);
-    a.push(7);
-    a.push(3);
-    a.push(1);
-    EXPECT_EQ(a.top(), 7);
-    a.pop();
-    EXPECT_EQ(a.top(), 3);
-    a.merge(b);
-    EXPECT_EQ(a.top(), 5);
-    a.pop();
-    EXPECT_EQ(a.top(), 4);
-};
-
 struct Node {
-    sbl::intrusive::LeftistTreeNode<Node*> node;
+    sbl::LeftistTreeNode<Node*> node;
     bool compare(Node *other) {
         return value < other->value;
     }
@@ -31,7 +13,7 @@ struct Node {
 };
 
 TEST(structure, leftist_tree_intrusive) {
-    sbl::intrusive::LeftistTree<Node *> a, b;
+    sbl::LeftistTree<Node *> a, b;
     Node x[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     b.push(x + 5);
     b.push(x + 4);

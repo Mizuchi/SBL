@@ -1,11 +1,9 @@
-#ifndef _sbl_order_statistic_tree_intrusive
-#define _sbl_order_statistic_tree_intrusive
-#define private public
+#ifndef _sbl_order_statistic_tree
+#define _sbl_order_statistic_tree
 #include<cstddef>
 #include<cstdlib>
 #include<cassert>
 #include"detail/splay_tree.hpp"
-#include"../utility/type_traits.hpp"
 
 /** \brief This is a intrusive data structure version of order statistic
  * tree.
@@ -14,7 +12,6 @@
  */
 
 namespace sbl {
-namespace intrusive {
 
 template<class NodePtr, class GetNode>
 class OrderStatisticTree;
@@ -278,6 +275,5 @@ class OrderStatisticTree {
         }
 };
 
-} // namespace intrusive
 } // namespace sbl
 #endif

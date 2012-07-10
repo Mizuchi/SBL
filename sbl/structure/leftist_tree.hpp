@@ -1,99 +1,88 @@
 #ifndef _sbl_leftist_tree
 #define _sbl_leftist_tree
 #include<algorithm>
-#include<functional>
-#include<memory>
-
 namespace sbl {
-template < class T,
-         class Compare = std::less<T>,
-         class Allocator = std::allocator<T> >
+
+/** \brief This is a intrusive data structure version of leftist tree.
+ *
+ * User must provide the node type, manage the memory, and guarantee:
+ *
+ * Member variant LeftistTreeNode<NodePtr> node record the information.
+ *
+ * Member function bool less_than(NodePtr other) to use for all comparisons
+ * of keys
+ */
+
+template<class NodePtr> class LeftistTree;
+
+template<class NodePtr>
+class LeftistTreeNode {
+        friend class LeftistTree<NodePtr>;
+        NodePtr leftChild, rightChild;
+        size_t nullPathLength;
+};
+
+template <class NodePtr>
 class LeftistTree {
-        // http://en.wikipedia.org/wiki/Leftist_tree
     private:
+        LeftistTreeNode<NodePtr> &get_node(NodePtr s) {
+            return s->node;
+        }
+        NodePtr &l(NodePtr a) {
+            return get_node(a).leftChild;
+        }
+        NodePtr &r(NodePtr a) {
+            return get_node(a).rightChild;
+        }
+        size_t &npl(NodePtr a) {
+            static size_t zero = 0;
+            if (a == NULL)
+                return zero;
+            else
+                return get_node(a).nullPathLength;
+        }
 
-        Compare comp;
-        struct Node {
-
-            const T value;
-            std::size_t nullPathLength;
-            Node *leftChild, *rightChild;
-
-            Node(const T &a): value(a), nullPathLength(0),
-                leftChild(0), rightChild(0) {}
-
-            std::size_t left_length() const {
-                if (leftChild == NULL) return 0;
-                return leftChild->nullPathLength;
-            }
-            std::size_t right_length() const {
-                if (rightChild == NULL) return 0;
-                return rightChild->nullPathLength;
-            }
-        } *root;
-        typename Allocator::template rebind<Node>::other alloc;
-
-        /// merge two node
-        Node *bind(Node *a, Node *b) {
+        NodePtr bind(NodePtr a, NodePtr b) {
             if (a == NULL) return b;
             if (b == NULL) return a;
+            if (a->compare(b)) std::swap(a, b);
 
-            // This was a max height biased leftist tree.
-            // For the sake of convenience we let a->value bigger.
-            if (comp(a->value, b->value))
-                std::swap(a, b);
+            r(a) = bind(r(a), b);
 
-            a->rightChild = bind(a->rightChild, b);
-
-            if (a->left_length() < a->right_length())
-                // left null path length is shorter
-                std::swap(a->leftChild, a->rightChild);
-
-            a->nullPathLength = a->right_length() + 1;
+            if (npl(l(a)) < npl(r(a)))
+                std::swap(l(a), r(a));
+            npl(a) = npl(r(a)) + 1;
             return a;
         }
-
-        void del(Node *p) {
-            if (p == 0) return;
-            del(p->leftChild);
-            del(p->rightChild);
-            alloc.destroy(p);
-            alloc.deallocate(p, 1);
-        }
-
+        NodePtr root;
     public:
-        LeftistTree() : root(0) {}
+        LeftistTree(): root(0) {}
 
-        ~LeftistTree() {
-            clear();
-        }
-        void clear() {
-            del(root);
-            root = 0;
+        void push(NodePtr a) {
+            l(a) = r(a) = NULL;
+            npl(a) = 0;
+            root = bind(root, a);
         }
 
-        void push(const T &a) {
-            Node *p = alloc.allocate(1);
-            alloc.construct(p, a);
-            root = bind(root, p);
-        }
-
-        const T &top() const {
-            return root->value;
-        }
-
-        void pop() {
-            Node *p = root;
-            root = bind(root->leftChild, root->rightChild);
-            alloc.destroy(p);
-            alloc.deallocate(p, 1);
+        NodePtr pop() {
+            NodePtr p = root;
+            root = bind(l(root), r(root));
+            return p;
         }
 
         void merge(LeftistTree &a) {
             root = bind(root, a.root);
-            a.root = 0;
+            a.root = NULL;
+        }
+
+        const NodePtr &top() const {
+            return root;
+        }
+
+        void clear() {
+            root = NULL;
         }
 };
-} // namespace sbl
 
+} // namespace sbl
 #endif
