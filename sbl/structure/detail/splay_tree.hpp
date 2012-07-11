@@ -1,20 +1,18 @@
 #ifndef _sbl_splay_tree
 #define _sbl_splay_tree
+#include"rotate_tree.hpp"
 
 namespace sbl {
 namespace detail {
 
 template<class NodePtr>
-struct SplayTreeNode {
-    NodePtr left;   ///< left child
-    NodePtr right;  ///< right child
-    NodePtr parent; ///< parent node
-    SplayTreeNode(): left(NULL), right(NULL), parent(NULL) {}
+class SplayTreeNodeBase:public RotateTreeNodeBase<NodePtr> {
+    protected:
+        ~SplayTreeNodeBase() {}
 };
 
-
 template<class NodePtr, class GetNode, class Expand, class Update>
-class SplayTree {
+class SplayTreeBase: public RotateTreeBase<NodePtr, GetNode, Expand, Update> {
         // Bottom-Up Splay Tree
         // FAQ
         // Q: Why not use Top-Down Splay Tree?
@@ -23,121 +21,28 @@ class SplayTree {
         //    * The design of Top-Down is too complex (need 3 trees to splay)
         //    * Since we can not be allocated memory, we have no dummy node
     public:
-        /// get the node information from NodePtr
-        static SplayTreeNode<NodePtr> &get_node(NodePtr a) {
-            assert(a != NULL);
-            return GetNode()(a);
-        }
 
-        /// get the child according index {0: left, 1: right}
-        static NodePtr get_child(NodePtr a, size_t idx) {
-            assert(idx == 0 or idx == 1);
-            if (idx == 0)
-                return get_left(a);
-            else
-                return get_right(a);
-        }
-
-        /// set the child according index {0: left, 1: right}
-        static void set_child(NodePtr a, size_t idx, NodePtr b) {
-            assert(idx == 0 or idx == 1);
-            if (idx == 0)
-                set_left(a, b);
-            else
-                set_right(a, b);
-        }
-
-        /// get left child
-        static NodePtr get_left(NodePtr a) {
-            if (a == NULL) return NULL;
-            return get_node(a).left;
-        }
-
-        /// set left child
-        static void set_left(NodePtr a, NodePtr b) {
-            if (a == NULL) return ;
-            get_node(a).left = b;
-        }
-
-        /// get right child
-        static NodePtr get_right(NodePtr a) {
-            if (a == NULL) return NULL;
-            return get_node(a).right;
-        }
-
-        /// set right child
-        static void set_right(NodePtr a, NodePtr b) {
-            if (a == NULL) return ;
-            get_node(a).right = b;
-        }
-
-        /// get parent
-        static NodePtr get_parent(NodePtr a) {
-            if (a == NULL)return NULL;
-            return get_node(a).parent;
-        }
-
-        /// set parent
-        static void set_parent(NodePtr a, NodePtr b) {
-            if (a == NULL) return ;
-            get_node(a).parent = b;
-        }
-
-        /// check if x is a right child
-        static bool is_right(NodePtr x) {
-            assert(x != NULL);
-            NodePtr y = get_parent(x);
-            if (y == NULL) return false;
-            return get_right(y) == x;
-        }
-
-        /// check if x is a left child
-        static bool is_left(NodePtr x) {
-            return not is_right(x);
-        }
-
-        static void expand(NodePtr parent, NodePtr left, NodePtr right) {
-            return Expand()(parent, left, right);
-        }
-
-        static void update(NodePtr parent, NodePtr left, NodePtr right) {
-            return Update()(parent, left, right);
-        }
-
-        /// expand node x information to his children
-        static void expand(NodePtr x) {
-            expand(x, get_left(x), get_right(x));
-        }
-
-        /// update node x information from his children
-        static void update(NodePtr x) {
-            update(x, get_left(x), get_right(x));
-        }
-
-        /// swap x to her father
-        static void rotate(NodePtr x) {
-            NodePtr y = get_parent(x);
-            if (get_parent(y) != NULL) {
-                if (get_left(get_parent(y)) == y)
-                    set_left(get_parent(y), x);
-                else
-                    set_right(get_parent(y), x);
-            }
-            set_parent(x, get_parent(y));
-            size_t c = (get_left(y) == x) ? 0 : 1;
-            set_child(y, c, get_child(x, 1 - c));
-            set_parent(get_child(y, c), y);
-
-            set_child(x, 1 - c, y);
-            set_parent(y, x);
-
-            update(y);
-            update(x);
-        }
+        typedef RotateTreeBase<NodePtr, GetNode, Expand, Update> Base;
+        typedef SplayTreeBase<NodePtr, GetNode, Expand, Update> Self;
+        using Base::get_left;
+        using Base::get_right;
+        using Base::get_child;
+        using Base::get_parent;
+        using Base::link_left;
+        using Base::link_right;
+        using Base::link_child;
+        using Base::set_parent;
+        using Base::is_left;
+        using Base::is_right;
+        using Base::get_node;
+        using Base::rotate;
+        using Base::update;
+        using Base::expand;
 
         /// splay t to the root
         static void splay(NodePtr t) {
             while (get_parent(t) != NULL) {
+                assert(t != NULL);
                 NodePtr y = get_parent(t);
                 if (get_parent(y) == NULL) {
                     rotate(t);
@@ -174,15 +79,13 @@ class SplayTree {
                 int k = compare(current);
                 if (k == -1) {
                     if (get_left(current) == NULL) {
-                        set_left(current, node);
-                        set_parent(node, current);
+                        link_left(current, node);
                         break;
                     }
                     current = get_left(current);
                 } else {
                     if (get_right(current) == NULL) {
-                        set_right(current, node);
-                        set_parent(node, current);
+                        link_right(current, node);
                         break;
                     }
                     current = get_right(current);
@@ -222,11 +125,11 @@ class SplayTree {
             expand(root);
 
             // break left child
-            set_left(root, NULL);
+            link_left(root, NULL);
             set_parent(left, NULL);
 
             // break right child
-            set_right(root, NULL);
+            link_right(root, NULL);
             set_parent(right, NULL);
 
             if (left == NULL) {
@@ -234,8 +137,7 @@ class SplayTree {
             } else {
                 left = rightmost(left);
                 assert(get_right(left) == NULL);
-                set_right(left, right);
-                set_parent(right, left);
+                link_right(left, right);
                 update(left);
                 return left;
             }
@@ -272,8 +174,15 @@ class SplayTree {
             splay(current);
             return current;
         }
+    protected:
+        ~SplayTreeBase() {}
 
-}; // class SplayTree
+}; // class SplayTreeBase
+template<class NodePtr>
+class SplayTreeNode: public SplayTreeNodeBase<NodePtr> {};
+
+template<class NodePtr, class GetNode, class Expand, class Update>
+class SplayTree: public SplayTreeBase<NodePtr, GetNode, Expand, Update> {};
 } // namespace detail
 } // namespace sbl
 #endif

@@ -3,7 +3,7 @@
 #include<cstddef>
 #include<cstdlib>
 #include<cassert>
-#include"detail/splay_tree.hpp"
+#include"detail/size_splay_tree.hpp"
 
 /** \brief This is a intrusive data structure version of order statistic
  * tree.
@@ -17,13 +17,8 @@ template<class NodePtr, class GetNode, class Compare>
 class OrderStatisticTree;
 
 template<class NodePtr>
-class OrderStatisticTreeNode {
-        template<class, class, class> friend class OrderStatisticTree;
-    public:
-        ::sbl::detail::SplayTreeNode<NodePtr> node;
-        size_t size;
-        OrderStatisticTreeNode(): size(1) {}
-};
+class OrderStatisticTreeNode:
+    public ::sbl::detail::SizeSplayTreeNodeBase<NodePtr> {};
 
 /** @brief order statistic tree is a data structure described in Introduction
  * to Algorithm.
@@ -37,66 +32,15 @@ class OrderStatisticTreeNode {
  */
 
 template < class NodePtr, class GetNode, class Compare>
-class OrderStatisticTree {
-        /// This data structure implement by using Treap.
-        /// Treap is a binary search tree.
+class OrderStatisticTree
+        :private ::sbl::detail::SizeSplayTreeBase<NodePtr, GetNode, DoNothing, DoNothing> {
+        /// This data structure implement by using Splay Tree.
+        /// Splay Tree is a binary search tree.
     private:
-        NodePtr root;
         Compare compare;
+
         typedef OrderStatisticTree<NodePtr, GetNode, Compare> Self;
-
-        struct Update {
-            void operator()(NodePtr parent, NodePtr left, NodePtr right) const {
-                assert(parent != NULL);
-                Self::set_size(parent, Self::get_size(left) + Self::get_size(right) + 1);
-            }
-        };
-
-        struct Expand {
-            void operator()(...) const {}
-        };
-
-        struct GetSplayNode {
-            ::sbl::detail::SplayTreeNode<NodePtr>
-            &operator()(NodePtr a) const {
-                return Self::get_node(a).node;
-            }
-        };
-
-        typedef ::sbl::detail::SplayTree <
-            NodePtr,
-            GetSplayNode,
-            Expand,
-            Update 
-        > SplayTree;
-
-        SplayTree st;
-
-        static NodePtr get_left(NodePtr a) {
-            return SplayTree::get_left(a);
-        }
-        static NodePtr get_right(NodePtr a) {
-            return SplayTree::get_right(a);
-        }
-
-        /// get the node information from NodePtr
-        static OrderStatisticTreeNode<NodePtr> &get_node(NodePtr a) {
-            assert(a != NULL);
-            GetNode getNode;
-            return getNode(a);
-        }
-
-        /// @return number of nodes in subtree a.
-        static size_t get_size(NodePtr a) {
-            if (a == NULL) return 0;
-            return get_node(a).size;
-        }
-
-        /// change size attribute.
-        static void set_size(NodePtr a, size_t value) {
-            if (a == NULL) return;
-            get_node(a).size = value;
-        }
+        typedef ::sbl::detail::SizeSplayTreeBase<NodePtr, GetNode, DoNothing, DoNothing> Base;
 
         struct ThreeWay {
             NodePtr x;
@@ -109,6 +53,16 @@ class OrderStatisticTree {
             ThreeWay(NodePtr _): x(_) {}
         };
 
+        NodePtr root;
+        using Base::get_left;
+        using Base::get_right;
+        using Base::get_size;
+        using Base::add;
+        using Base::find;
+        using Base::del;
+        using Base::leftmost;
+        using Base::rightmost;
+        using Base::at;
     public:
 
         OrderStatisticTree(): root(NULL) {}
@@ -121,16 +75,16 @@ class OrderStatisticTree {
         /// add a new node to root
         void insert(NodePtr x) {
             assert(x != NULL);
-            root = st.add(root, x, ThreeWay(x));
+            root = add(root, x, ThreeWay(x));
         }
 
         /// @return the node has been removed.
         NodePtr erase(NodePtr x) {
             ThreeWay compare(x);
-            root = st.find(root, compare);
+            root = find(root, compare);
             if (compare(root) == 0) {
                 NodePtr delNode = root;
-                root = st.del(root);
+                root = del(root);
                 return delNode;
             }
             return NULL;
@@ -158,7 +112,7 @@ class OrderStatisticTree {
         struct Smaller3Way {
             NodePtr store;
             int operator()(NodePtr current) const {
-                if (compare(current,store)) return 1;
+                if (compare(current, store)) return 1;
                 return -1;
             }
             Compare compare;
@@ -168,14 +122,14 @@ class OrderStatisticTree {
 
         /// @return first NodePtr smaller than NodePtr x.
         NodePtr smaller(NodePtr x) {
-            root = st.find(root, Smaller3Way(x));
+            root = find(root, Smaller3Way(x));
             assert(x != NULL);
             assert(root != NULL);
-            if (compare(root, x))
+            if (compare(root, x)) {
                 return root;
-            else {
+            } else {
                 // half change to splay the bigger one.
-                root = st.find(root, Smaller3Way(x));
+                root = find(root, Smaller3Way(x));
                 assert(x != NULL);
                 assert(root != NULL);
                 if (compare(root, x))
@@ -183,13 +137,14 @@ class OrderStatisticTree {
                 else
                     return NULL;
             }
+            assert(false);
         }
 
     private:
         struct Bigger3Way {
             NodePtr store;
             int operator()(NodePtr current) const {
-                if (compare(store,current))
+                if (compare(store, current))
                     return -1;
                 return 1;
             }
@@ -200,14 +155,14 @@ class OrderStatisticTree {
 
         /// @return first NodePtr bigger than NodePtr x.
         NodePtr bigger(NodePtr x) {
-            root = st.find(root, Bigger3Way(x));
+            root = find(root, Bigger3Way(x));
             assert(x != NULL);
             assert(root != NULL);
-            if (compare(x, root))
+            if (compare(x, root)) {
                 return root;
-            else {
+            } else {
                 // half change to splay the smaller one.
-                root = st.find(root, Bigger3Way(x));
+                root = find(root, Bigger3Way(x));
                 assert(x != NULL);
                 assert(root != NULL);
                 if (compare(x, root))
@@ -215,62 +170,31 @@ class OrderStatisticTree {
                 else
                     return NULL;
             }
+            assert(false);
         }
 
-    private:
-        template<int n>
-        struct AlwaysReturn {
-            int operator()(...) {
-                return n;
-            }
-        };
-    public:
         /// @return the minimum node.
         NodePtr smallest() {
-            //root = st.find(root, AlwaysReturn < -1 > ());
-            root = st.leftmost(root);
+            root = leftmost(root);
             assert(get_left(root) == NULL);
             return root;
         }
         /// @return the maximum node.
         NodePtr biggest() {
-            //root = st.find(root, AlwaysReturn<1>());
-            root = st.rightmost(root);
+            root = rightmost(root);
             assert(get_right(root) == NULL);
             return root;
         }
 
-    private:
-        struct FindPosition {
-            mutable size_t idx;
-            FindPosition(size_t _): idx(_) {}
-            int operator()(NodePtr current) {
-                NodePtr leftChild = Self::get_left(current);
-                size_t size = Self::get_size(leftChild);
-                if (size == idx)
-                    return 0;
-                else if (size + 1 > idx)
-                    return -1;
-                else {
-                    idx -= size + 1;
-                    return 1;
-                }
-            }
-
-        };
-    public:
-
-        /// @return the n-th small node.
+        /// @return n-th node
         NodePtr at(size_t n) {
-            assert(n >= 0);
-            assert(n < size());
-            root = st.find(root, FindPosition(n));
+            root = at(root, n);
             return root;
         }
 
         /// @return equivalence node of x.
         NodePtr find(NodePtr x) {
-            root = st.find(root, ThreeWay(x));
+            root = find(root, ThreeWay(x));
             return root;
         }
         /// @return remove all node in OrderStatisticTree
