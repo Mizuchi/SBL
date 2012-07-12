@@ -1,5 +1,7 @@
-#ifndef _sbl_binary_tree
-#define _sbl_binary_tree
+#ifndef _sbl_binary_tree_base
+#define _sbl_binary_tree_base
+#include<cstddef>
+#include<cassert>
 
 namespace sbl {
 namespace detail {
@@ -112,11 +114,6 @@ class BinaryTreeBase {
             return not is_right(x);
         }
 }; // class BinaryTreeBase
-
-template<class NodePtr> 
-class BinaryTreeNode: public BinaryTreeNodeBase<NodePtr>{};
-template<class NodePtr, class GetNode> 
-class BinaryTree: public BinaryTreeBase<NodePtr, GetNode>{};
 
 } // namespace detail
 } // namespace sbl

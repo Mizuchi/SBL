@@ -1,5 +1,5 @@
-#ifndef _sbl_splay_tree
-#define _sbl_splay_tree
+#ifndef _sbl_splay_tree_base
+#define _sbl_splay_tree_base
 #include"rotate_tree.hpp"
 
 namespace sbl {
@@ -65,7 +65,7 @@ class SplayTreeBase: public RotateTreeBase<NodePtr, GetNode, Expand, Update> {
         /// add a new node to root according compare.
         /// compare must given a NodePtr and return {-1, 0, 1}
         /// -1: current node bigger, to the left subtree
-        /// 0: current node equal to x, to the right subtree
+        /// 0: current node equal to x, to the left subtree
         /// 1: current node smaller, to the right subtree
         /// @return new root
         template<class Compare3way>
@@ -77,7 +77,7 @@ class SplayTreeBase: public RotateTreeBase<NodePtr, GetNode, Expand, Update> {
             while (true) {
                 expand(current);
                 int k = compare(current);
-                if (k == -1) {
+                if (k == -1 or k == 0) {
                     if (get_left(current) == NULL) {
                         link_left(current, node);
                         break;
@@ -178,11 +178,6 @@ class SplayTreeBase: public RotateTreeBase<NodePtr, GetNode, Expand, Update> {
         ~SplayTreeBase() {}
 
 }; // class SplayTreeBase
-template<class NodePtr>
-class SplayTreeNode: public SplayTreeNodeBase<NodePtr> {};
-
-template<class NodePtr, class GetNode, class Expand, class Update>
-class SplayTree: public SplayTreeBase<NodePtr, GetNode, Expand, Update> {};
 } // namespace detail
 } // namespace sbl
 #endif

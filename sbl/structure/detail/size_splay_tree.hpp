@@ -1,5 +1,5 @@
-#ifndef _sbl_size_splay_tree
-#define _sbl_size_splay_tree
+#ifndef _sbl_size_splay_tree_base
+#define _sbl_size_splay_tree_base
 #include"splay_tree.hpp"
 
 namespace sbl {
@@ -113,23 +113,41 @@ class SizeSplayTreeBase:
                     return 1;
                 }
             }
-
         };
     public:
 
         /// @return the n-th small node.
-        NodePtr at(NodePtr root, size_t n) {
+        static NodePtr at(NodePtr root, size_t n) {
             assert(n >= 0);
             assert(n < get_size(root));
             return find(root, FindPosition(n));
         }
+    private:
+        struct InsertPosition {
+            // almost like FindPosition, except return -1 when node found.
+            mutable size_t idx;
+            InsertPosition(size_t _): idx(_) {}
+            int operator()(NodePtr current) {
+                NodePtr leftChild = Self::get_left(current);
+                size_t size = Self::get_size(leftChild);
+                if (size == idx)
+                    return -1;
+                else if (size + 1 > idx)
+                    return -1;
+                else {
+                    idx -= size + 1;
+                    return 1;
+                }
+            }
+        };
+    public:
+        /// @return insert a node to the n-th place
+        static NodePtr insert(NodePtr root, size_t n, NodePtr newNode) {
+            assert(n >= 0);
+            assert(n <= get_size(root));
+            return add(root, newNode, InsertPosition(n));
+        }
 };
-
-//template<class NodePtr>
-//class SizeSplayTreeNode: public SizeSplayTreeNodeBase<NodePtr> {};
-
-//template<class NodePtr, class GetNode, class Expand, class Update>
-//class SizeSplayTree: public SizeSplayTreeBase<NodePtr, GetNode, Expand, Update> {};
 
 } // namespace detail
 } // namespace sbl

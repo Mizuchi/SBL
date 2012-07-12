@@ -1,5 +1,5 @@
-#ifndef _sbl_rotate_tree
-#define _sbl_rotate_tree
+#ifndef _sbl_rotate_tree_base
+#define _sbl_rotate_tree_base
 #include"binary_tree.hpp"
 
 namespace sbl {
