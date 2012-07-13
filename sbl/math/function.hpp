@@ -12,7 +12,8 @@ namespace sbl {
 /// Euler's totient function
 /// Counts the number of positive integers less than or equal to n that are
 /// relatively prime to n.
-template<class T> T euler(T n) {
+template<class T> 
+T euler(T n) {
     if (n == 1) return 1;
     std::vector<T>a;
     factorize_integer(n, &a);
@@ -32,7 +33,7 @@ template<class T> T euler(T n) {
 /// return 0  if n is not square-free.
 /// \pre n > 0 (mobius(0) is undefined)
 template<class T>
-signed char mobius(T n) {
+int mobius(T n) {
     if (n == 1) return 1;
     std::vector<T> a;
     factorize_integer(n, &a);
@@ -40,7 +41,7 @@ signed char mobius(T n) {
 
     // check whether n is square-free or not
     if(std::unique(a.begin(), a.end()) == a.end())
-        return a.size() % 2 ? 1 : -1;
+        return a.size() % 2 == 0 ? 1 : -1;
     else
         return 0;
 }
