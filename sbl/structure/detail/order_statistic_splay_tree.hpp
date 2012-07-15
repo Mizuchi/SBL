@@ -6,17 +6,17 @@ namespace sbl {
 namespace detail {
 
 template<class NodePtr, class GetNode, class Expand, class Update>
-class SizeSplayTreeBase;
+class OrderStatisticSplayTreeBase;
 
 template<class NodePtr>
-class SizeSplayTreeNodeBase: public SplayTreeNodeBase<NodePtr> {
+class OrderStatisticSplayTreeNodeBase: public SplayTreeNodeBase<NodePtr> {
     private:
-        template<class, class, class, class> friend class SizeSplayTreeBase;
+        template<class, class, class, class> friend class OrderStatisticSplayTreeBase;
         size_t size;
     public:
-        SizeSplayTreeNodeBase(): size(1) {}
+        OrderStatisticSplayTreeNodeBase(): size(1) {}
     protected:
-        ~SizeSplayTreeNodeBase() {}
+        ~OrderStatisticSplayTreeNodeBase() {}
 };
 
 /** @brief Size Splay Tree
@@ -29,10 +29,10 @@ class SizeSplayTreeNodeBase: public SplayTreeNodeBase<NodePtr> {
  */
 
 template<class NodePtr, class GetNode, class Expand, class Update>
-class BaseOfSizeSplayTreeBase {
+class BaseOfOrderStatisticSplayTreeBase {
     private:
 
-        typedef SizeSplayTreeBase<NodePtr, GetNode, Expand, Update> Self;
+        typedef OrderStatisticSplayTreeBase<NodePtr, GetNode, Expand, Update> Self;
 
         struct SizeUpdate {
             void operator()(NodePtr parent, NodePtr left, NodePtr right) const {
@@ -55,13 +55,13 @@ class BaseOfSizeSplayTreeBase {
 };
 
 template<class NodePtr, class GetNode, class Expand, class Update>
-class SizeSplayTreeBase:
-    public BaseOfSizeSplayTreeBase<NodePtr, GetNode, Expand, Update>::type {
+class OrderStatisticSplayTreeBase:
+    public BaseOfOrderStatisticSplayTreeBase<NodePtr, GetNode, Expand, Update>::type {
     protected:
-        ~SizeSplayTreeBase() {}
+        ~OrderStatisticSplayTreeBase() {}
     public:
-        typedef typename BaseOfSizeSplayTreeBase<NodePtr, GetNode, Expand, Update>::type Base;
-        typedef SizeSplayTreeBase<NodePtr, GetNode, Expand, Update> Self;
+        typedef typename BaseOfOrderStatisticSplayTreeBase<NodePtr, GetNode, Expand, Update>::type Base;
+        typedef OrderStatisticSplayTreeBase<NodePtr, GetNode, Expand, Update> Self;
         using Base::get_left;
         using Base::get_right;
         using Base::get_child;
@@ -80,7 +80,7 @@ class SizeSplayTreeBase:
         using Base::del;
         using Base::find;
 
-        static SizeSplayTreeNodeBase<NodePtr> &get_node(NodePtr a) {
+        static OrderStatisticSplayTreeNodeBase<NodePtr> &get_node(NodePtr a) {
             assert(a != NULL);
             return GetNode()(a);
         }

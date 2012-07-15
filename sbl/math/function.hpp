@@ -34,6 +34,7 @@ T euler(T n) {
 /// \pre n > 0 (mobius(0) is undefined)
 template<class T>
 int mobius(T n) {
+    // XXX: I don't know why, but return a signed char won't pass the unittest.
     if (n == 1) return 1;
     std::vector<T> a;
     factorize_integer(n, &a);

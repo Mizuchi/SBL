@@ -1,22 +1,22 @@
 #ifndef _sbl_vector_tree_base
 #define _sbl_vector_tree_base
-#include"size_splay_tree.hpp"
+#include"order_statistic_splay_tree.hpp"
 
 namespace sbl {
 namespace detail {
 
 template<class NodePtr>
-class VectorTreeNodeBase: public SizeSplayTreeNodeBase<NodePtr> {
+class VectorTreeNodeBase: public OrderStatisticSplayTreeNodeBase<NodePtr> {
     protected:
         ~VectorTreeNodeBase() {}
 };
 
 template<class NodePtr, class GetNode, class Update, class Expand>
-class VectorTreeBase: public SizeSplayTreeBase<NodePtr, GetNode, Update, Expand> {
+class VectorTreeBase: public OrderStatisticSplayTreeBase<NodePtr, GetNode, Update, Expand> {
     protected:
         ~VectorTreeBase() {}
     public:
-        typedef SizeSplayTreeBase<NodePtr, GetNode, Update, Expand> Base;
+        typedef OrderStatisticSplayTreeBase<NodePtr, GetNode, Update, Expand> Base;
         typedef VectorTreeBase<NodePtr, GetNode, Update, Expand> Self;
         using Base::get_left;
         using Base::get_right;

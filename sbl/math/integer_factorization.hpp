@@ -16,6 +16,7 @@ namespace sbl {
 template<class T>
 std::map<T, size_t> factorize_integer(T n) {
     // http://en.wikipedia.org/wiki/Trial_division
+    // CLRS 3rd edition P975
     std::map<T, size_t> result;
     for (T i = 2; i <= integer_sqrt(n); i++)
         while (n % i == 0) {
@@ -34,6 +35,7 @@ std::map<T, size_t> factorize_integer(T n) {
 /// \post result < n
 /// \post n % result == 0
 template<class T> T get_divisor(T n) {
+    // use pollard rho algorithm
     assert(n > 1);
     if (n % 2 == 0) return 2;
     assert(!isprime(n));

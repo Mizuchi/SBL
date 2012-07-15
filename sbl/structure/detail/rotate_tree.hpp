@@ -52,6 +52,7 @@ class RotateTreeBase : public BinaryTreeBase<NodePtr, GetNode> {
 
         /// swap x to her father
         static void rotate(NodePtr x) {
+            // CLRS 3rd edition Page 313.
             NodePtr y = get_parent(x);
             if (get_parent(y) != NULL) {
                 if (get_left(get_parent(y)) == y)

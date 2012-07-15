@@ -8,6 +8,7 @@ template<class T>
 bool isprime(T x) {
     // http://en.wikipedia.org/wiki/Primality_test
     // http://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test
+    // CLRS 3rd edition P968
     struct {
         bool operator()(T n, T a, T d, unsigned long s) const {
             d = pow_mod(a, d, n);

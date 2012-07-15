@@ -3,7 +3,7 @@
 #include<cstddef>
 #include<cstdlib>
 #include<cassert>
-#include"detail/size_splay_tree.hpp"
+#include"detail/order_statistic_splay_tree.hpp"
 
 /** \brief This is a intrusive data structure version of order statistic
  * tree.
@@ -18,7 +18,7 @@ class OrderStatisticTree;
 
 template<class NodePtr>
 class OrderStatisticTreeNode:
-    public ::sbl::detail::SizeSplayTreeNodeBase<NodePtr> {};
+    public ::sbl::detail::OrderStatisticSplayTreeNodeBase<NodePtr> {};
 
 /** @brief order statistic tree is a data structure described in Introduction
  * to Algorithm.
@@ -33,14 +33,14 @@ class OrderStatisticTreeNode:
 
 template < class NodePtr, class GetNode, class Compare>
 class OrderStatisticTree
-        :private ::sbl::detail::SizeSplayTreeBase<NodePtr, GetNode, DoNothing, DoNothing> {
+        :private ::sbl::detail::OrderStatisticSplayTreeBase<NodePtr, GetNode, DoNothing, DoNothing> {
         /// This data structure implement by using Splay Tree.
         /// Splay Tree is a binary search tree.
     private:
         Compare compare;
 
         typedef OrderStatisticTree<NodePtr, GetNode, Compare> Self;
-        typedef ::sbl::detail::SizeSplayTreeBase<NodePtr, GetNode, DoNothing, DoNothing> Base;
+        typedef ::sbl::detail::OrderStatisticSplayTreeBase<NodePtr, GetNode, DoNothing, DoNothing> Base;
 
         struct ThreeWay {
             NodePtr x;
