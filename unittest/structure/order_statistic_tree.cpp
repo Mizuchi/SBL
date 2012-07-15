@@ -53,7 +53,7 @@ TEST(structure, OrderStatisticTree) {
    p.push_back(6), tree.insert(&p.back());
    NodeOST x(3);
    EXPECT_EQ(tree.biggest()->value, 8);
-   EXPECT_EQ(tree.at(2)->value, 5);
+   EXPECT_EQ(tree.find_by_order(2)->value, 5);
    EXPECT_EQ(tree.find(&x)->value, 3);
    EXPECT_EQ(tree.bigger(&x)->value, 5);
    EXPECT_EQ(tree.smaller(&x)->value, 2);
@@ -61,7 +61,7 @@ TEST(structure, OrderStatisticTree) {
    EXPECT_EQ(tree.smaller_count(&x), 1);
    tree.erase(&x);
 
-   EXPECT_EQ(tree.at(2)->value, 6);
+   EXPECT_EQ(tree.find_by_order(2)->value, 6);
    EXPECT_EQ(tree.biggest()->value, 8);
    EXPECT_EQ(tree.bigger(&x)->value, 5);
    EXPECT_EQ(tree.smaller(&x)->value, 2);

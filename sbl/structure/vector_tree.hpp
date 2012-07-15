@@ -17,8 +17,8 @@ class VectorTree: private detail::VectorTreeBase<NodePtr, GetNode, Update, Expan
         VectorTree(): root(NULL) {}
 
         /// @return n-th element
-        NodePtr at(size_t n) {
-            root = Base::at(root, n);
+        NodePtr find_by_order(size_t n) {
+            root = Base::find_by_order(root, n);
             return root;
         }
 

@@ -62,7 +62,7 @@ class OrderStatisticTree
         using Base::del;
         using Base::leftmost;
         using Base::rightmost;
-        using Base::at;
+        using Base::find_by_order;
     public:
 
         OrderStatisticTree(): root(NULL) {}
@@ -187,8 +187,8 @@ class OrderStatisticTree
         }
 
         /// @return n-th node
-        NodePtr at(size_t n) {
-            root = at(root, n);
+        NodePtr find_by_order(size_t n) {
+            root = find_by_order(root, n);
             return root;
         }
 

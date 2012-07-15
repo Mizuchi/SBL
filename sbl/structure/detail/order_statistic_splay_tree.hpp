@@ -117,7 +117,7 @@ class OrderStatisticSplayTreeBase:
     public:
 
         /// @return the n-th small node.
-        static NodePtr at(NodePtr root, size_t n) {
+        static NodePtr find_by_order(NodePtr root, size_t n) {
             assert(n >= 0);
             assert(n < get_size(root));
             return find(root, FindPosition(n));

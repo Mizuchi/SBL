@@ -32,7 +32,7 @@ class VectorTreeBase: public OrderStatisticSplayTreeBase<NodePtr, GetNode, Updat
         using Base::update;
         using Base::expand;
         using Base::get_size;
-        using Base::at;
+        using Base::find_by_order;
 
         template<class Call>
         static NodePtr call_segment(NodePtr root, size_t l, size_t r, Call func) {
@@ -47,22 +47,22 @@ class VectorTreeBase: public OrderStatisticSplayTreeBase<NodePtr, GetNode, Updat
             if (l == 0 and r == get_size(root)) {
                 func(root);
             } else if (l == 0) {
-                root = at(root, r);
+                root = find_by_order(root, r);
                 func(get_left(root));
                 update(root);
             } else if (r == get_size(root)) {
-                root = at(root, l - 1);
+                root = find_by_order(root, l - 1);
                 func(get_right(root));
                 update(root);
             } else {
-                root = at(root, r);
+                root = find_by_order(root, r);
                 expand(root);
                 NodePtr newRoot = get_left(root);
 
                 link_left(root, NULL);
                 set_parent(newRoot, NULL);
 
-                newRoot = at(newRoot, l - 1);
+                newRoot = find_by_order(newRoot, l - 1);
                 expand(newRoot);
 
                 func(get_right(newRoot));
