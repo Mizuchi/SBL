@@ -68,6 +68,7 @@ def unittest(bld):
             include += '#include"../' + testFile + '"\n'
         code = r'''
         #include<gtest/gtest.h>
+        #include"../sbl/debug.hpp"
         {}
         int main(int argv, char **argc) {{
             testing::InitGoogleTest(&argv, argc);
