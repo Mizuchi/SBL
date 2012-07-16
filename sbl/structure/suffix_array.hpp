@@ -7,11 +7,12 @@
 #include"../base.hpp"
 
 namespace sbl {
+namespace suffixArray {
 
 using std::vector;
 using std::size_t;
 
-class SuffixArray {
+class DC3 {
     public:
         struct CompressThree {
             size_t index;
@@ -181,10 +182,9 @@ class SuffixArray {
                 return result;
             }
         }
-}; // class suffix array
+}; // class DC3
 
-namespace suffixArray {
-    typedef vector<size_t> Index;
+typedef vector<size_t> Index;
 
 /// vector<size_t> array of suffix array.
 template<class BegIter, class EndIter>
@@ -195,7 +195,7 @@ vector<size_t> make_index(BegIter beg, EndIter end) {
         v -= minElement;
         v ++;
     }
-    return SuffixArray::dc3(origin);
+    return DC3::dc3(origin);
 }
 
 vector<size_t> make_rank(vector<size_t> const &index) {
@@ -219,8 +219,7 @@ vector<size_t> make_height(
         }
     return height;
 }
-}
-
+} // namespace suffixArray
 } // namespace sbl
 
 #endif
