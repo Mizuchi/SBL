@@ -7,6 +7,8 @@
 #include<set>
 #include<map>
 namespace sbl {
+// XXX: using namespace std is not a good idea
+using namespace std;
 typedef ostream &ost;
 #define OHEAD template<class T> ost operator<<
 #define THEAD template<class T1, class T2> ost operator<<
