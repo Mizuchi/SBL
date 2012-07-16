@@ -39,7 +39,7 @@ class RadixSort {
             STATIC_ASSERT(current < maxDigits,
                           RadixSortError_current_digit_is_too_large);
             value_type x = functor(v);
-            x /= 1 << current;
+            x /= value_type(1) << current;
             x %= 1 << digits;
             return std::abs(x);
         }
