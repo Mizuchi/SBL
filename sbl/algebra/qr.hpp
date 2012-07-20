@@ -5,19 +5,25 @@
 
 namespace sbl {
 
+/// @brief QR decomposition (AKA QR factorization)
+///
+/// @post a == *Q * *R
+/// @post Q is unitary matrix
+/// @post R is upper triangular matrix
 template <class T>
-void qr_decomposition(const Matrix<T> &a, Matrix<T> *oQ, Matrix<T> *oR) {
+void qr_decomposition(const Matrix<T> &A, Matrix<T> *Q, Matrix<T> *R) {
     // modified Gram-Schmidt iteration
     
-    Matrix<T> &q = *oQ;
-    Matrix<T> &r = *oR;
+    const Matrix<T> &a = A;
+    Matrix<T> &q = *Q;
+    Matrix<T> &r = *R;
     const size_t m = a.row_size();
     const size_t n = a.col_size();
-    assert(m > 0);
-    assert(n > 0);
-
     q.resize(m, n);
     r.resize(n, n);
+    if(n == 0 or m == 0) 
+        return;
+
     r.fill(identity(std::plus<T>(), a[0][0]));
 
     std::vector< Matrix<T> > v(n);

@@ -14,7 +14,7 @@ const long kBit = 6;
 
 struct Bigint: std::vector<long long> {
     // XXX: This is just a prototype. 
-    // Derived from a STL Container is not a good idea.
+    // Derived from STL Container is a shitty idea.
     typedef std::vector<long long> Base;
     Bigint(long long x = 0): Base(1, x) {}
     Bigint(std::string s) {

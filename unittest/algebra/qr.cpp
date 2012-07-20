@@ -1,8 +1,6 @@
-
-#include<iostream>
-using namespace std;
 #include"../../sbl/algebra/qr.hpp"
 #include<gtest/gtest.h>
+#include<algorithm>
 
 template<class T>
 void matrix_almost_eq(sbl::Matrix<T> a, sbl::Matrix<T> b) {
