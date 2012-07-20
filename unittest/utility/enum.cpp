@@ -1,4 +1,5 @@
 #include"../../sbl/utility/enum.hpp"
+#include<gtest/gtest.h>
 
 struct ColorDef {
     enum type { red, green, blue };

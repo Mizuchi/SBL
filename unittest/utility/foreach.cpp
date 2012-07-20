@@ -2,6 +2,7 @@
 #include<string>
 #include<vector>
 #include<map>
+#include<gtest/gtest.h>
 
 TEST(foreach, vector_no_ref) {
     std::vector<int> a(10, 20);

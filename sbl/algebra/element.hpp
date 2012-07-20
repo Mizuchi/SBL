@@ -14,7 +14,6 @@ T identity(std::plus<T>, const T& = T(0)) {
     return T(0);
 }
 
-
 template<class T>
 T identity(std::multiplies<T>, const T& = T(1)) {
     return T(1);
@@ -32,6 +31,12 @@ T inverse(std::plus<T>, const T &a) {
 }
 
 template<class T> T inverse(std::multiplies<T>, const T &a);
+
+/// @return conjugate of the number 
+template<class Number> 
+Number conj(Number n)  {
+    return n;
+}
 
 } // namespace sbl
 #endif

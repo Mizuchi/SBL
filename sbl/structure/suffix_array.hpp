@@ -13,6 +13,10 @@ using std::vector;
 using std::size_t;
 
 class DC3 {
+        // DC3 algorithm
+        // http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.137.7871
+        //
+        // This implementation is much slow than the one on the paper.
     public:
         struct CompressThree {
             size_t index;
@@ -186,7 +190,9 @@ class DC3 {
 
 typedef vector<size_t> Index;
 
-/// vector<size_t> array of suffix array.
+/// Index array of suffix array.
+/// We name the result as sa.
+/// \post str[result[i]:] < str[result[i+1]:]
 template<class BegIter, class EndIter>
 vector<size_t> make_index(BegIter beg, EndIter end) {
     vector<size_t> origin(beg, end);
@@ -198,17 +204,25 @@ vector<size_t> make_index(BegIter beg, EndIter end) {
     return DC3::dc3(origin);
 }
 
+/// rank of suffix array
+/// Whe name the result as rank
+/// \post result[sa[i]] == i
+/// \post result[i] < result[j] iff str[i:] < str[j:]
 vector<size_t> make_rank(vector<size_t> const &index) {
     vector<size_t> rank(index.size());
     for (size_t i = 0; i < index.size(); ++i) rank[index[i]] = i;
     return rank;
 }
 
+/// height of suffix array
+/// Whe name the result as height
+/// \post str[sa[i]:sa[i]+height[i]] == str[sa[i+1]:sa[i+1]+height[i]]
 template<class Iter>
 vector<size_t> make_height(
     vector<size_t> const &index,
     vector<size_t> const &rank,
-    Iter beg, Iter) {
+    Iter beg, Iter
+) {
     vector<size_t> height(index.size());
     for (size_t i = 0, h = 0; i < index.size(); ++i)
         if (rank[i] > 0) {
@@ -220,6 +234,20 @@ vector<size_t> make_height(
     return height;
 }
 } // namespace suffixArray
+
+class SuffixArray {
+    private:
+        std::vector<size_t> sa;
+        std::vector<size_t> rank;
+        std::vector<size_t> height;
+    public:
+        template<class Iterator>
+        SuffixArray(Iterator beg, Iterator end)
+            : sa(suffixArray::make_index(beg, end)),
+              rank(suffixArray::make_rank(sa)),
+              height(suffixArray::make_height(sa, rank, beg, end)) {}
+};
+
 } // namespace sbl
 
 #endif
