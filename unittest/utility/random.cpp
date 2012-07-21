@@ -1,8 +1,6 @@
 #include"../../sbl/utility/random.hpp"
 #include<gtest/gtest.h>
 #include<set>
-#include<iostream>
-using namespace std;
 
 TEST(random, ten) {
     std::set<unsigned long> a;
