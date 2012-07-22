@@ -57,7 +57,7 @@ template <class T, class Op = std::plus<T> > class FenwickTree {
         }
 
         /// Increases value of n-th element by inc.
-        void increase_nth_element(size_t n, T inc) {
+        void increase_nth_element(size_t n, T inc = 1) {
             for (size_t i = n; i < size(); i |= i + 1)
                 x[i] = op(x[i], inc);
         }

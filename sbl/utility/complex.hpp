@@ -8,10 +8,14 @@ namespace sbl {
 /// @brief sbl::Complex is a alternative of std::complex
 ///
 /// So why do I re-inventing the wheel?
-/// Yes, C++ Standard given as a good complex class,
-/// unfortunately, "The effect of instantiating the template complex 
+/// Yes, C++ Standard provide a good complex class.
+/// Unfortunately, "The effect of instantiating the template complex 
 /// for any type other than float, double, or long double is unspecified."
-/// (ISO/IEC 14882:2011, 26.4)
+/// (ISO/IEC 14882:2011, 26.4) 
+/// And sbl::Complex doesn't have this limit.
+/// When you use a integer type, it becomes gaussian integer.
+/// The more important thing is sbl::Complex works with sbl::Float,
+/// which is widely used in sbl::algebra and sbl::geometry.
 template<class T>
 class Complex {
     private:

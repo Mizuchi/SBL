@@ -17,6 +17,6 @@ class Enum : public Def {
         bool operator>=(const Enum &s) const { return val >= s.val; }
         bool operator==(const Enum &s) const { return val == s.val; }
         bool operator!=(const Enum &s) const { return val != s.val; }
-};
+}; // class Enum
 } // namespace sbl
 #endif
