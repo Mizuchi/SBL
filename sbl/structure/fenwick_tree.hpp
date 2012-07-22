@@ -2,8 +2,10 @@
 #define _sbl_fenwick_tree
 #include<vector>
 #include"../algebra/element.hpp"
+#include"../utility/bits.hpp"
 
 namespace sbl {
+using std::size_t;
 /* -----------------------------------------------------------------------*/
 /** @brief Fenwich Tree
  *
