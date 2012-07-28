@@ -28,6 +28,8 @@ TEST(graph, strongly_connected_components) {
 
     EXPECT_EQ(ans[1], ans[2]);
     EXPECT_EQ(ans[1], ans[8]);
+    EXPECT_NE(ans[1], ans[3]);
     EXPECT_EQ(ans[3], ans[4]);
     EXPECT_EQ(ans[6], ans[7]);
+    EXPECT_NE(ans[3], ans[6]);
 }

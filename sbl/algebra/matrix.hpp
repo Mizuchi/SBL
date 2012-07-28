@@ -24,6 +24,7 @@ class Matrix {
         size_t rowSize, colSize;
 
     public:
+        typedef T value_type;
         Matrix(): rowSize(0), colSize(0) {}
         Matrix(size_t n, size_t m)
             : a(n * m), rowSize(n), colSize(m) {}

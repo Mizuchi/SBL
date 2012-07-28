@@ -38,5 +38,17 @@ Number conj(Number n)  {
     return n;
 }
 
+/// @return whether a given element is zero (identity in plus)
+template<class T>
+bool iszero(T a) {
+    return a == identity(std::plus<T>(), a);
+}
+
+/// @return whether a given element is one  (identity in multiplies)
+template<class T>
+bool isone(T a) {
+    return a == identity(std::multiplies<T>(), a);
+}
+
 } // namespace sbl
 #endif
