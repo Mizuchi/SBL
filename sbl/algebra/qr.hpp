@@ -7,7 +7,7 @@ namespace sbl {
 
 /// @brief QR decomposition (AKA QR factorization)
 ///
-/// @post a == *Q * *R
+/// @post A == *Q * *R
 /// @post Q is unitary matrix
 /// @post R is upper triangular matrix
 template <class T>

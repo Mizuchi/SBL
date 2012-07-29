@@ -12,7 +12,7 @@ namespace sbl {
 /// Euler's totient function
 /// Counts the number of positive integers less than or equal to n that are
 /// relatively prime to n.
-template<class T> 
+template<class T>
 T euler(T n) {
     if (n == 1) return 1;
     std::vector<T>a;
@@ -23,6 +23,22 @@ T euler(T n) {
         n = n / i * (i - 1);
     }
     return n;
+}
+
+/// Generate Euler's totient function
+static inline std::vector<size_t>
+generate_euler(size_t n) {
+    ++n;
+    std::vector<size_t> a(n);
+    a[1] = 1;
+    for (size_t i = 2; i < n; i++)
+        if (!a[i])
+            for (size_t j = i; j < n; j += i) {
+                if (a[j] == 0) 
+                    a[j] = j;
+                a[j] = a[j] / i * (i - 1);
+            }
+    return a;
 }
 
 
@@ -41,10 +57,27 @@ int mobius(T n) {
     std::sort(a.begin(), a.end());
 
     // check whether n is square-free or not
-    if(std::unique(a.begin(), a.end()) == a.end())
+    if (std::unique(a.begin(), a.end()) == a.end())
         return a.size() % 2 == 0 ? 1 : -1;
     else
         return 0;
+}
+
+/// Generate Mobius Function
+static inline std::vector<int> generate_mobius(size_t n) {
+    ++n;
+    std::vector<bool> b(n, true);
+    std::vector<int> result(n, 1);
+    for (size_t i = 2; i < n; i++)
+        if (b[i]) {
+            size_t j = i * i;
+            result[i] = -1; // Prime
+            for (size_t k = i * 2; k < n; k += i) {
+                b[k] = 0;
+                result[k] *= k % j ? -1 : 0;
+            }
+        }
+    return result;
 }
 
 /// Carmichael function
@@ -56,9 +89,9 @@ int mobius(T n) {
 template<class T>
 T carmichael(T n) {
     assert(n > 0);
-    if (n == 1) 
+    if (n == 1)
         return 1;
-    if (n % 8 == 0) 
+    if (n % 8 == 0)
         n /= 2;
     AUTO(b, factorize_integer(n));
     T result = 1;
@@ -73,5 +106,7 @@ T carmichael(T n) {
     }
     return result;
 }
+
+
 } // namespace sbl
 #endif

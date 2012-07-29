@@ -5,7 +5,7 @@
 #include<algorithm>
 #include<cassert>
 #include"gcd.hpp"
-#include"isprime.hpp"
+#include"prime.hpp"
 #include"../utility/foreach.hpp"
 #include"../utility/bits.hpp"
 
