@@ -8,6 +8,7 @@
 #include<cmath>
 #include"../utility/foreach.hpp"
 #include"../utility/type_traits.hpp"
+#include"../utility/bits.hpp"
 
 // http://lemon.cs.elte.hu/pub/doc/latest-svn/a00854.html
 
@@ -31,7 +32,6 @@ class RadixSort {
         typedef typename std::iterator_traits<Iterator>::value_type OriginData;
         typedef typename result_of<Functor(OriginData)>::type value_type;
         static const size_t maxDigits = std::numeric_limits<value_type>::digits;
-        static const bool is_signed = std::numeric_limits<value_type>::is_signed;
         std::vector<OriginData> data, newData;
         value_type maxElement;
 
@@ -72,29 +72,19 @@ class RadixSort {
             }
 
             data.swap(newData);
-            counting_sort < current + digits > (
-                Bool < current + digits < maxDigits>());
-        }
-
-        template<bool is_signed> struct LessThanZero;
-
-        bool less_than_zero(const value_type &a, Bool<true> is_signed) {
-            static_cast<void>(is_signed);
-            return a < 0;
-        }
-        bool less_than_zero(const value_type &a, Bool<false> is_signed) {
-            static_cast<void>(is_signed);
-            return false;
+            counting_sort<current + digits>(
+                Bool<current + digits < maxDigits>()
+            );
         }
 
         void treat_negative_number() {
             newData.clear();
             rforeach(v, data) {
-                if (less_than_zero(functor(v), Bool<is_signed>()))
+                if (less_than_zero(functor(v)))
                     newData.push_back(v);
             }
             foreach(v, data) {
-                if (not less_than_zero(functor(v), Bool<is_signed>()))
+                if (not less_than_zero(functor(v)))
                     newData.push_back(v);
             }
             data.swap(newData);

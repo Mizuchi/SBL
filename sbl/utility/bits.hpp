@@ -13,6 +13,27 @@ void __is_integer() {
     STATIC_ASSERT(std::numeric_limits<T>::is_integer, must_be_a_integer);
 }
 
+template<bool is_signed> struct __LessThanZero;
+template<> struct __LessThanZero<true> {
+    template<class T> bool operator()(T a) {
+        return a < 0;
+    }
+}; // template<> struct __LessThanZero<true>
+template<> struct __LessThanZero<false> {
+    template<class T> bool operator()(T a) {
+        static_cast<void>(a);
+        return false;
+    }
+}; // template<> struct __LessThanZero<false>
+
+/// \return a < 0
+template<class T>
+bool less_than_zero(T a) {
+    // to avoid "comparison of unsigned expression < 0 is always false"
+    // warning, even T is a unsigned type
+    return __LessThanZero<std::numeric_limits<T>::is_signed>()(a);
+}
+
 /// Return a ** n, n must be a integer
 template<class T, class U>
 T power_integer(T a, U n) {
@@ -164,7 +185,7 @@ template<class T> bool addition_is_safe(T a, T b) {
         // indicate max >= a + b
         return max - a >= b and max - b >= a;
     }
-    if (a < 0 and b < 0) {
+    if (less_than_zero(a) and less_than_zero(b)) {
         // indicate min <= a + b
         return min - a <= b and min - b <= a;
     }
@@ -237,7 +258,7 @@ T integer_sqrt(T number) {
     // http://en.wikipedia.org/wiki/Integer_square_root
     // http://code.activestate.com/recipes/577821-integer-square-root-function/
     T low = 0;
-    T high = std::max(number, 2);
+    T high = number > 2 ? number : 2;
     while (high - low > 1) {
         T middle = (low + high) / 2;
         if (middle <= number / middle)

@@ -40,7 +40,7 @@ bool isprime(T x) {
 
 // arg: 20
 // ret: 2 3 5 7 11 13 17 19
-static std::vector<size_t> generate_prime(size_t n) {
+static inline std::vector<size_t> generate_prime(size_t n) {
     std::vector<bool> a(++n);
     std::vector<size_t> p;
     for (size_t i = 2; i < n; i++) {
@@ -56,7 +56,7 @@ static std::vector<size_t> generate_prime(size_t n) {
 // Port from http://en.wikipedia.org/wiki/Sieve_of_atkin
 // arg: 10
 // ret: 00110101000
-static std::vector<bool> generate_prime_fast(size_t limit) {
+static inline std::vector<bool> generate_prime_fast(size_t limit) {
     std::vector<bool> isPrime(limit + 1);
     for (size_t x = 1, xx = 1; xx <= limit; xx += 2 * x ++ + 1)
         for (size_t y = 1, yy = 1; yy <= limit; yy += 2 * y ++ + 1) {

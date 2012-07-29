@@ -59,7 +59,7 @@ T pow_mod_fast(T x, U y, T z) {
 template<class T>
 T mod(T a, T b) {
     a %= b;
-    if (a < 0) 
+    if (less_than_zero(a))
         a += b;
     return a;
 }
