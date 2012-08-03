@@ -9,7 +9,10 @@ namespace sbl {
 /// \link http://en.wikipedia.org/wiki/Greatest_common_divisor \endlink
 template<class T> T gcd(T a, T b) {
     // http://en.wikipedia.org/wiki/Euclidean_algorithm
-    return b != 0 ? gcd(b, a % b) : a;
+    if (b != 0)
+        return gcd(b, a % b);
+    else
+        return a;
 }
 
 /// Return least common multiple of a and b
@@ -46,7 +49,7 @@ template<class T>
 T modular_inverse(T a, T b) {
     // http://en.wikipedia.org/wiki/Modular_multiplicative_inverse
     assert(gcd(a, b) == 1);
-    
+
     // find x, y satisfy a * x + b * y = gcd(a, b)
     long long x, y;
     gcd(a, b, &x, &y);

@@ -62,7 +62,7 @@ TEST(Complex, Polar) {
     using namespace sbl;
     for (size_t i = 0; i < 100; i++) {
         Complex<Float> a(sqrt(rand()), sqrt(rand()));
-        EXPECT_EQ(a, polar(abs(a), arg(a)));
+        EXPECT_EQ(a, sbl::polar(abs(a), arg(a)));
     }
 }
 

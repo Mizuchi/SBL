@@ -7,17 +7,19 @@
 namespace sbl {
 namespace almostEqualFloat {
 
+using operatorOverloading::Base;
+using operatorOverloading::AnyTypePolicy;
+
 /// @brief overried the less than operator for built-in float 
 ///
 /// known issue: 
 /// since c++ does not support implicit conversion twice, 
 /// it does not accept a float when use it as a argument
 /// of a construct of a class. (see the unittest)
-class Float: public OperatorOverloadingBase<Float, double> {
+class Float: public Base<Float, double, AnyTypePolicy> {
     private:
-        typedef OperatorOverloadingBase<Float, double> Base;
-        friend class OperatorOverloadingBase<Float, double>;
-    public:
+        typedef Base<Float, double, operatorOverloading::AnyTypePolicy> FloatBase;
+        friend class Base<Float, double, operatorOverloading::AnyTypePolicy>;
         bool less(double a, double b) const {
             return (b - a) > zero;
         }
@@ -29,9 +31,9 @@ class Float: public OperatorOverloadingBase<Float, double> {
             return a / b;
         }
     public:
-        Float(double a = 0): Base(a) {}
+        Float(double a = 0): FloatBase(a) {}
         operator double() const {
-            return Base::operator double();
+            return FloatBase::operator double();
         }
 };
 

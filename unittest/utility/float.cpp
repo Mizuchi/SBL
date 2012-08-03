@@ -1,6 +1,7 @@
 #include"../../sbl/utility/float.hpp"
 #include<gtest/gtest.h>
 
+using sbl::Float;
 TEST(Float, base) {
     {
         double x = 0.1, y = 0.1, z = 0.01;
