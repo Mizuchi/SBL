@@ -107,6 +107,12 @@ T carmichael(T n) {
     return result;
 }
 
+/// @brief convert binary code to gray code
+template<class T>
+T binary2graycode(T a) {
+    // http://en.wikipedia.org/wiki/Gray_code
+    return a == 0 ? 0 : (a ^ (a >> 1));
+}
 
 } // namespace sbl
 #endif

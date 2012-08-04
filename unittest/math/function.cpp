@@ -44,3 +44,27 @@ TEST(math, gen_mobius) {
     for (int i = 1; a[i] != cSentinel; i++)
         EXPECT_EQ(a[i], ans[i]);
 }
+
+TEST(math, graycode) {
+    int a[] = {
+        0x0,
+        0x1,
+        0x3,
+        0x2,
+        0x6,
+        0x7,
+        0x5,
+        0x4,
+        0xC,
+        0xD,
+        0xF,
+        0xE,
+        0xA,
+        0xB,
+        0x9,
+        0x8,
+        cSentinel
+    };
+    for (int i = 1; a[i] != cSentinel; i++)
+        EXPECT_EQ(sbl::binary2graycode(i), a[i]);
+}
