@@ -1,4 +1,6 @@
 #include"../../sbl/algorithm/sort.hpp"
+#include<gtest/gtest.h>
+#include<climits>
 
 TEST(algorithm, sort) {
     using namespace std;
@@ -67,6 +69,7 @@ TEST(algorithm, sort_ran) {
 }
 
 namespace LemonUnitTest {
+using sbl::radix_sort;
 static const int n = 10000;
 
 struct Negate {

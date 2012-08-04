@@ -28,6 +28,8 @@ TEST(math, integer_factorization) {
     EXPECT_EQ(y[5], 7 * 13);
     EXPECT_EQ(y[6], 11 * 13);
     EXPECT_EQ(y[7], 1001);
+
+    EXPECT_EQ(get_divisor(9), 3);
 }
 
 TEST(math, integer_factorization2) {

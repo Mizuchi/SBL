@@ -67,6 +67,7 @@ TEST(Complex, Polar) {
 }
 
 TEST(Complex, assign) {
+    using namespace sbl;
     {
         Complex<Float> a(1.7, 2.5), b(3.3, -2.5);
         a += b;
