@@ -1,12 +1,10 @@
 ####################
 Source Basic Library
 ####################
-:Author: Tianjiao Yin <ytj000@gmail.com>
+:Author: mizuchi <ytj000@gmail.com>
 
-Copyright (C) 2012, Tianjiao Yin. All Rights Reserved.
-
-SBL is a C++ template library which provide many advanced algorithms and data
-structures. You can find  an incomplete list below.
+SBL is a general-purpose cross-platform C++ template library which provide many
+advanced algorithms and data structures.
 
 This library is designed for teaching purposes. To reach this goal, here is
 some principles of design:
@@ -98,3 +96,26 @@ Utility
 * filter (inspired by Haskell's filter)
 * Time (inspired by boost::progress_timer)
 * Pretty Printer for STL container 
+
+About Unittest
+==============
+
+Unittest require `waf <code.google.com/p/waf/>`_ and `googletest <code.google.com/p/googletest/>`_ .
+Contrib is welcome, however you should pass the unit-test first to make sure everything is all right.
+
+License
+=======
+
+Copyright (C) 2012, Tianjiao Yin. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
