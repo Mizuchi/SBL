@@ -6,12 +6,10 @@ namespace sbl {
 
 /** \brief This is a intrusive data structure version of leftist tree.
  *
- * User must provide the node type, manage the memory, and guarantee:
+ * User must provide the node type that contain LeftistTreeNode as a member
+ * variant. Provide two functor, one for compare two LeftistTreeNode, return if
+ * the lhs < rhs, another for get the LeftistTreeNode for your node type.
  *
- * Member variant LeftistTreeNode<NodePtr> node record the information.
- *
- * Member function bool less_than(NodePtr other) to use for all comparisons
- * of keys
  */
 
 template <class NodePtr, class GetNode, class Compare>
