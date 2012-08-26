@@ -3,9 +3,7 @@
 #include<cassert>
 
 namespace sbl {
-
 namespace gregorianCalendar {
-
 
 /// Check whether the date is suitable with gregorian calendar
 /// In another word, whether the date after 15 October 1582.
@@ -45,9 +43,6 @@ static inline int days_between_two_dates(
 ) {
     return __absolute_days(day2, month2, year2) -
            __absolute_days(day1, month1, year1);
-}
-
-static inline int index_of_the_day_of_the_week(int day, int month, int year) {
 }
 
 } // namespace gregorianCalendar
