@@ -1,6 +1,7 @@
 #ifndef _sbl_hash_permutation
 #define _sbl_hash_permutation
 #include "../structure/fenwick_tree.hpp"
+#include "permutation.hpp"
 #include<algorithm>
 
 namespace sbl {
@@ -15,13 +16,8 @@ namespace sbl {
  */
 /* -------------------------------------------------------------------------*/
 template<class T>
-T permutation2hash(std::vector<size_t> a) {
+T permutation2hash(Permutation a) {
     size_t n = a.size();
-    std::vector<size_t> b(n);
-    std::copy(a.begin(), a.end(), b.begin());
-    std::sort(b.begin(), b.end());
-    for (size_t i = 0; i < n; i++)
-        a[i] = std::lower_bound(b.begin(), b.end(), a[i]) - b.begin();
     FenwickTree<size_t> d(n);
     T k = 1, ans = 0;
     for (long i = n - 1; i >= 0; i--) {
@@ -44,7 +40,7 @@ T permutation2hash(std::vector<size_t> a) {
  */
 /* -------------------------------------------------------------------------*/
 template<class T>
-std::vector<size_t> hash2permutation(T k, size_t n) {
+Permutation hash2permutation(T k, size_t n) {
     std::vector<size_t> ret(n);
     if (n == 0) return ret;
     std::vector<T> f(n);
