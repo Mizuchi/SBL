@@ -17,15 +17,34 @@ class Permutation {
         explicit Permutation(size_t n): oneLineNotation(n) {
             for (size_t i = 0; i < n; i++)
                 oneLineNotation[i] = i;
+            assert(__validity_test());
         }
 
-        Permutation(value_type _): oneLineNotation(_) {}
+        Permutation(value_type _): oneLineNotation(_) {
+            assert(__validity_test());
+        }
 
         template<class IterBeg, class IterEnd>
         Permutation(IterBeg beg, IterEnd end) {
             oneLineNotation.reserve(std::distance(beg, end));
             for (; beg != end; ++beg)
                 oneLineNotation.push_back(*beg);
+            assert(__validity_test());
+        }
+
+        bool __validity_test() const {
+            value_type a(oneLineNotation);
+
+            // This should make a = {0, 1, ..., a.size() - 1}
+            std::sort(a.begin(), a.end());
+
+            if (a.front() != 0 or a.back() != a.size() - 1)
+                return false;
+
+            if (std::unique(a.begin(), a.end()) != a.end())
+                return false;
+
+            return true;
         }
 
         // public member function
