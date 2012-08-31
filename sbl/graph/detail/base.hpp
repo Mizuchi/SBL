@@ -4,16 +4,15 @@
 #include<limits>
 #include<cstddef>
 #include<vector>
-#include"foredge.hpp"
 #define SIZE_MAX (std::numeric_limits<std::size_t>::max())
 
 
 
 namespace sbl {
 
-/** @brief GraphBase
+/** @brief GraphBase (Deprecated)
  *
- * Design a graph class is not a easy job.
+ * Design a graph class is not a easy job. 
  *
  * Just like CLRS point out that "There is no one best way to store and access
  * vertex and edge attributes." (page 592, 3rd edition). So SBL Graph will not
@@ -27,6 +26,8 @@ namespace sbl {
  * after add a new edge.
  *
  * User could use macro foredge to travel graph.
+ *
+ * Deprecated. (was less tested, no users, no maintainer)
  */
 class GraphBase {
     public:

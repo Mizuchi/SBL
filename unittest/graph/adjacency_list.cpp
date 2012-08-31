@@ -16,7 +16,15 @@ TEST(graph, adjacency_list) {
     EXPECT_EQ(index2tail.size(), 2);
     EXPECT_EQ(index2tail[1], 2);
     EXPECT_EQ(index2tail[2], 0);
+
+    EXPECT_EQ(a.find_edges(0, 1).size(), 1);
+    EXPECT_EQ(a.find_edges(1, 0).size(), 1);
+    EXPECT_EQ(a.find_edges(1, 2).size(), 1);
     a.remove(one_two);
+    EXPECT_EQ(a.find_edges(0, 1).size(), 1);
+    EXPECT_EQ(a.find_edges(1, 0).size(), 1);
+    EXPECT_EQ(a.find_edges(1, 2).size(), 0);
+
     index2tail.clear();
     foredge(a, 1, tail, index) {
         index2tail[index] = tail;

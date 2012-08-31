@@ -1,19 +1,21 @@
 #ifndef _sbl_adjacency_list
 #define _sbl_adjacency_list
+#include<vector>
 #include<cstddef>
 #include<climits>
-#include"detail/common.hpp"
-#include"../utility/type_traits.hpp"
+#include"detail/foredge.hpp"
 
 namespace sbl {
-class AdjacencyList:
-    public GraphCommon<AdjacencyList, EmptyBase> {
+
+using std::size_t;
+static const size_t SIZE_MAX = std::numeric_limits<std::size_t>::max();
+
+class AdjacencyList {
     public:
         typedef size_t Edge;
         typedef size_t Node;
 
     private:
-
         static const size_t sentinel = INT_MAX;
 
         struct LinkNode {
@@ -32,7 +34,6 @@ class AdjacencyList:
         }
 
     public:
-
         Edge add_edge(Node head, Node tail) {
             expand(head);
             link.push_back(LinkNode(info[head], tail));
@@ -59,10 +60,6 @@ class AdjacencyList:
             return info.size();
         }
 
-        std::size_t number_of_edges() const {
-            return link.size();
-        }
-
         Edge begin_edge(Node head) const {
             expand(head);
             return info[head];
@@ -79,6 +76,60 @@ class AdjacencyList:
         Node tail(Edge edge) const {
             return link[edge].tail;
         }
+
+        // O(|E|)
+        std::size_t number_of_edges() const {
+            std::size_t result = 0;
+            for (std::size_t node = 0; node < number_of_nodes(); node++) {
+                foredge(*this, node, tail, edge) {
+                    result++;
+                    static_cast<void>(tail);
+                    static_cast<void>(edge);
+                }
+            }
+            return result;
+        }
+
+        // O(|E|)
+        std::size_t prev(Edge edge) const {
+            std::size_t head = this->head(edge);
+            if (begin_edge(head) == edge)
+                return end_edge(head);
+            for (Edge iter = begin_edge(head);
+                 iter != end_edge(head);
+                 iter = next(iter)) {
+                if (next(iter) == edge)
+                    return iter;
+            }
+            assert(false and "GraphCommon::prev: edge is not in this graph");
+        }
+
+        // O(|E|)
+        std::size_t head(Edge edge) const {
+            for (std::size_t node = 0;
+                 node < number_of_nodes(); node++) {
+                foredge(*this, node, tail, index) {
+                    if (index == edge)
+                        return node;
+                    static_cast<void>(tail);
+                }
+            }
+            assert(false and "GraphCommon::head: edge is not in this graph");
+        }
+
+        // O(|E|)
+        std::vector<Edge>
+        find_edges(Node head, Node iTail, std::size_t limit = SIZE_MAX) const {
+            std::vector<Edge> result;
+            foredge(*this, head, tail, index) {
+                if (result.size() == limit)
+                    break;
+                if (tail == iTail)
+                    result.push_back(index);
+            }
+            return result;
+        }
+
 };
 
 } // namespace sbl
