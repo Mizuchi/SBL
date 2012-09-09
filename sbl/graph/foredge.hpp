@@ -1,7 +1,7 @@
 #ifndef _sbl_graph_foredge
 #define _sbl_graph_foredge
 
-#include"../../utility/macro.hpp"
+#include"../utility/macro.hpp"
 
 /* -----------------------------------------------------------------------*/
 /**

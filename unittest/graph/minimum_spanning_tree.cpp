@@ -1,10 +1,9 @@
-
-#include"../../sbl/graph/adjacency_list.hpp"
-#include"../../sbl/graph/minimum_spanning_tree.hpp"
 #include<vector>
 #include<numeric>
 #include<gtest/gtest.h>
-using namespace sbl;
+#include"../../sbl/graph/adjacency_list.hpp"
+#include"../../sbl/utility/functional.hpp"
+#include"../../sbl/graph/dijkstra.hpp"
 
 struct GetCostFromVectorMST {
     std::vector<size_t> cost;
@@ -17,6 +16,7 @@ struct GetCostFromVectorMST {
 };
 
 TEST(graph, minimum_spanning_tree) {
+    using namespace sbl;
     AdjacencyList a;
     GetCostFromVectorMST getter;
 
@@ -59,7 +59,7 @@ TEST(graph, minimum_spanning_tree) {
     addedge(9, 3, 2);
 #undef addedge
 
-    AUTO(ans, minimum_spanning_tree(a, getter, true, 1));
+    AUTO(ans, make_dijkstra(a, getter, true, 1, -1, Second()));
     EXPECT_FALSE(ans.vaild[0]);
     int all = std::accumulate(ans.value.begin() + 1, ans.value.begin() + 10, 0);
     EXPECT_EQ(all, 0 + 4 + 8 + 7 + 9 + 4 + 2 + 1 + 2);

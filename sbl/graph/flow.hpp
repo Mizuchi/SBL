@@ -2,7 +2,7 @@
 #define _sbl_flow
 #include<map>
 #include"adjacency_list.hpp"
-#include"shortest_path.hpp"
+#include"dijkstra.hpp"
 #include"../utility/type_traits.hpp"
 #include"../utility/foreach.hpp"
 #include"../base.hpp"
@@ -161,7 +161,7 @@ class MaxFlow {
                 GetCost<MaxFlow> getCost(*this, infinity);
 
                 // XXX: shortest path algorithm is not necessary, bfs is enough.
-                AUTO(ans, shortest_path(graph, getCost, true, source, target));
+                AUTO(ans, make_dijkstra(graph, getCost, true, source, target));
 
                 expandFlow = std::numeric_limits<ResultOfGetFlow>::max();
                 change_flows(source, target, ans.father);

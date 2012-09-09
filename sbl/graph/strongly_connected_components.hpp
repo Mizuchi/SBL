@@ -1,6 +1,6 @@
 #ifndef _sbl_strongly_connected_components
 #define _sbl_strongly_connected_components
-#include"detail/foredge.hpp"
+#include"foredge.hpp"
 #include<stack>
 
 namespace sbl {

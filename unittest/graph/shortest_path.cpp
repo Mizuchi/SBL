@@ -1,8 +1,7 @@
-#include"../../sbl/graph/adjacency_list.hpp"
-#include"../../sbl/graph/shortest_path.hpp"
 #include<vector>
 #include<gtest/gtest.h>
-using namespace sbl;
+#include"../../sbl/graph/adjacency_list.hpp"
+#include"../../sbl/graph/dijkstra.hpp"
 
 struct GetCostFromVector {
     std::vector<size_t> cost;
@@ -15,6 +14,7 @@ struct GetCostFromVector {
 };
 
 TEST(graph, shortest_path) {
+    using namespace sbl;
     AdjacencyList a;
     GetCostFromVector getter;
 #define addedge(s, t, c) a.add_edge((s), (t)); getter.add((c));
@@ -32,7 +32,7 @@ TEST(graph, shortest_path) {
     addedge(4, 2, 9);
     addedge(4, 3, 2);
 #undef addedge
-    AUTO(ans, shortest_path(a, getter, true, 0));
+    AUTO(ans, make_dijkstra(a, getter, true));
 
     EXPECT_EQ(ans.value[1], 8);
     EXPECT_EQ(ans.value[2], 9);

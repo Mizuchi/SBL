@@ -4,12 +4,11 @@
 #include<cstddef>
 #include<climits>
 #include<limits>
-#include"detail/foredge.hpp"
+#include"foredge.hpp"
 
 namespace sbl {
 
 using std::size_t;
-static const size_t SIZE_MAX = INT_MAX;
 
 class AdjacencyList {
     public:
@@ -17,7 +16,7 @@ class AdjacencyList {
         typedef size_t Node;
 
     private:
-        static const size_t sentinel = SIZE_MAX;
+        static const size_t sentinel = -1;
 
         struct LinkNode {
             size_t next;
@@ -120,7 +119,7 @@ class AdjacencyList {
 
         // O(|E|)
         std::vector<Edge>
-        find_edges(Node head, Node iTail, std::size_t limit = SIZE_MAX) const {
+        find_edges(Node head, Node iTail, std::size_t limit = -1) const {
             std::vector<Edge> result;
             foredge(*this, head, tail, index) {
                 if (result.size() == limit)
