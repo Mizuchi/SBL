@@ -3,12 +3,13 @@
 #include<vector>
 #include<cstddef>
 #include<climits>
+#include<limits>
 #include"detail/foredge.hpp"
 
 namespace sbl {
 
 using std::size_t;
-static const size_t SIZE_MAX = std::numeric_limits<std::size_t>::max();
+static const size_t SIZE_MAX = INT_MAX;
 
 class AdjacencyList {
     public:
@@ -16,7 +17,7 @@ class AdjacencyList {
         typedef size_t Node;
 
     private:
-        static const size_t sentinel = INT_MAX;
+        static const size_t sentinel = SIZE_MAX;
 
         struct LinkNode {
             size_t next;
@@ -41,7 +42,7 @@ class AdjacencyList {
             return info[head];
         }
 
-        void remove(Edge edge) {
+        void remove_edge(Edge edge) {
             size_t headNode = head(edge);
             size_t nextEdge = link[edge].next;
             if (prev(edge) == end_edge(headNode)) {

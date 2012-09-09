@@ -20,7 +20,7 @@ TEST(graph, adjacency_list) {
     EXPECT_EQ(a.find_edges(0, 1).size(), 1);
     EXPECT_EQ(a.find_edges(1, 0).size(), 1);
     EXPECT_EQ(a.find_edges(1, 2).size(), 1);
-    a.remove(one_two);
+    a.remove_edge(one_two);
     EXPECT_EQ(a.find_edges(0, 1).size(), 1);
     EXPECT_EQ(a.find_edges(1, 0).size(), 1);
     EXPECT_EQ(a.find_edges(1, 2).size(), 0);

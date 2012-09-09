@@ -103,6 +103,9 @@ About Unittest
 Unittest require `waf <code.google.com/p/waf/>`_ and `googletest <code.google.com/p/googletest/>`_ .
 Contrib is welcome, however you should pass the unit-test first to make sure everything is all right.
 
+If you need a example for some class or function, you may want to take a look at unittest.
+Everything should be tested in unittest.
+
 License
 =======
 

@@ -51,7 +51,7 @@ class GraphBase {
 
         /// Remove a exist edge.
         /// @return whether edge in the graph.
-        virtual bool remove(Edge edge) = 0;
+        virtual bool remove_edge(Edge edge) = 0;
 
         /// Remove all node and edge.
         virtual void clear() = 0;
