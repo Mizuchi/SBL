@@ -23,6 +23,7 @@ class MaxFlow {
         AdjacencyList graph;
 
         // mapping residual network's edge to origin edge
+        // XXX: std::map is not necessary, it could be calcuated directly
         std::map<size_t, size_t> newToOldIndex;
 
     public:
@@ -66,11 +67,16 @@ class MaxFlow {
         }
     private:
 
-        static bool is_positive_direction_edge(size_t edge) {
+        size_t get_old_edge(size_t edge) const {
+            assert(newToOldIndex.count(edge));
+            return newToOldIndex.find(edge)->second;
+        }
+
+        static inline bool is_positive_direction_edge(size_t edge) {
             return edge % 2 == 0;
         }
 
-        static bool is_negative_direction_edge(size_t edge) {
+        static inline bool is_negative_direction_edge(size_t edge) {
             return not is_positive_direction_edge(edge);
         }
 
@@ -78,14 +84,11 @@ class MaxFlow {
         typedef typename result_of<GetFlow(size_t)>::type ResultOfGetFlow;
 
         ResultOfGetCapacity get_capacity(size_t edge) const {
-            assert(newToOldIndex.count(edge));
-            size_t oldEdge = newToOldIndex.find(edge)->second;
-            return old_get_capacity(oldEdge);
+            return old_get_capacity(get_old_edge(edge));
         }
 
         ResultOfGetFlow get_flow(size_t edge) const {
-            assert(newToOldIndex.count(edge));
-            size_t oldEdge = newToOldIndex.find(edge)->second;
+            size_t oldEdge = get_old_edge(edge);
             if (is_positive_direction_edge(edge))
                 return old_get_flow(oldEdge);
             else
@@ -96,8 +99,7 @@ class MaxFlow {
             return get_capacity(edge) - get_flow(edge);
         }
         void set_flow(size_t edge, ResultOfGetFlow newFlow) {
-            assert(newToOldIndex.count(edge));
-            size_t oldEdge = newToOldIndex[edge];
+            size_t oldEdge = get_old_edge(edge);
 
             if (is_positive_direction_edge(edge))
                 old_set_flow(oldEdge, newFlow);
@@ -179,7 +181,7 @@ class MaxFlow {
                     CostType result;
                     result.isFinite = self.residual_capacity(edge) > 0;
                     if (result.isFinite) {
-                        size_t oldEdge = self.newToOldIndex.find(edge)->second;
+                        size_t oldEdge = self.get_old_edge(edge);
                         result.weight = getWeight(oldEdge);
                         result.isPositive = is_positive_direction_edge(edge);
                     }
