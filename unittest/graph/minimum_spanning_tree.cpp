@@ -3,7 +3,9 @@
 #include<gtest/gtest.h>
 #include"../../sbl/graph/adjacency_list.hpp"
 #include"../../sbl/utility/functional.hpp"
-#include"../../sbl/graph/dijkstra.hpp"
+#include"../../sbl/graph/shortest_path_tree.hpp"
+#include<iostream>
+using namespace std;
 
 struct GetCostFromVectorMST {
     std::vector<size_t> cost;
@@ -32,7 +34,6 @@ TEST(graph, minimum_spanning_tree) {
     size_t f4 = addedge(3, 4, 7);
     addedge(3, 6, 4);
     size_t f9 = addedge(3, 9, 2);
-
     addedge(4, 3, 7);
     size_t f5 = addedge(4, 5, 9);
     addedge(4, 6, 14);
@@ -59,22 +60,29 @@ TEST(graph, minimum_spanning_tree) {
     addedge(9, 3, 2);
 #undef addedge
 
-    AUTO(ans, make_dijkstra(a, getter, true, 1, -1, Second()));
-    EXPECT_FALSE(ans.vaild[0]);
-    int all = std::accumulate(ans.value.begin() + 1, ans.value.begin() + 10, 0);
+    AUTO(wg, MAKE3(WeightedGraphWrapper, a, getter, Second()));
+
+    AUTO(ans, MAKE1(ShortestPathTree, wg));
+    ans.run(1, -1, false);
+    EXPECT_FALSE(ans.in_tree(0));
+    int all = 0;
+    for (int i = 1; i < 10; i++) 
+        all += ans.get_sum_of_weights(i);
+
+    // If get 28, you may need to keep in mind that 
+    // prim is a little a bit different with dijkstra.
+    // You can not relax a node which is already in path tree.
     EXPECT_EQ(all, 0 + 4 + 8 + 7 + 9 + 4 + 2 + 1 + 2);
 
+    EXPECT_EQ(ans.get_sum_of_weights(4), 7);
+    EXPECT_EQ(ans.get_father(4), 3);
+    EXPECT_EQ(ans.get_edge_to_father(4), f4);
 
-    EXPECT_EQ(ans.value[4], 7);
-    EXPECT_EQ(ans.father[4], 3);
-    EXPECT_EQ(ans.index[4], f4);
+    EXPECT_EQ(ans.get_sum_of_weights(5), 9);
+    EXPECT_EQ(ans.get_father(5), 4);
+    EXPECT_EQ(ans.get_edge_to_father(5), f5);
 
-    EXPECT_EQ(ans.value[5], 9);
-    EXPECT_EQ(ans.father[5], 4);
-    EXPECT_EQ(ans.index[5], f5);
-
-    EXPECT_EQ(ans.value[9], 2);
-    EXPECT_EQ(ans.father[9], 3);
-    EXPECT_EQ(ans.index[9], f9);
-
+    EXPECT_EQ(ans.get_sum_of_weights(9), 2);
+    EXPECT_EQ(ans.get_father(9), 3);
+    EXPECT_EQ(ans.get_edge_to_father(9), f9);
 }

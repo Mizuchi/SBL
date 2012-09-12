@@ -1,7 +1,7 @@
 #include<vector>
 #include<gtest/gtest.h>
 #include"../../sbl/graph/adjacency_list.hpp"
-#include"../../sbl/graph/dijkstra.hpp"
+#include"../../sbl/graph/shortest_path_tree.hpp"
 
 struct GetCostFromVector {
     std::vector<size_t> cost;
@@ -32,10 +32,23 @@ TEST(graph, shortest_path) {
     addedge(4, 2, 9);
     addedge(4, 3, 2);
 #undef addedge
-    AUTO(ans, make_dijkstra(a, getter, true));
+    AUTO(weightedGraph, MAKE2(WeightedGraphWrapper, a, getter));
+    {
+    AUTO(ans, MAKE1(ShortestPathTree, weightedGraph));
+    ans.run(0);
 
-    EXPECT_EQ(ans.value[1], 8);
-    EXPECT_EQ(ans.value[2], 9);
-    EXPECT_EQ(ans.value[3], 7);
-    EXPECT_EQ(ans.value[4], 5);
+    EXPECT_EQ(ans.get_sum_of_weights(1), 8);
+    EXPECT_EQ(ans.get_sum_of_weights(2), 9);
+    EXPECT_EQ(ans.get_sum_of_weights(3), 7);
+    EXPECT_EQ(ans.get_sum_of_weights(4), 5);
+    }
+    {
+    AUTO(ans, MAKE1(ShortestPathTree, weightedGraph));
+    ans.run(0, -1, true);
+
+    EXPECT_EQ(ans.get_sum_of_weights(1), 8);
+    EXPECT_EQ(ans.get_sum_of_weights(2), 9);
+    EXPECT_EQ(ans.get_sum_of_weights(3), 7);
+    EXPECT_EQ(ans.get_sum_of_weights(4), 5);
+    }
 }
