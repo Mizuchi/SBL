@@ -238,16 +238,17 @@ class MaxFlow {
             const GetWeight &getWeight
         ) {
             // Edmonds-Karp algorithm
+            AUTO(get_cost, MAKE2(GetCost, *this, getWeight));
+            AUTO(weightedGraph, MAKE2(
+                     WeightedGraphWrapper,
+                     graph,
+                     get_cost
+                 ));
+            AUTO(tree, MAKE1(ShortestPathTree, weightedGraph));
+
             ResultOfGetFlow result, expandFlow;
             do {
                 expandFlow = std::numeric_limits<ResultOfGetFlow>::max();
-                AUTO(get_cost, MAKE2(GetCost, *this, getWeight));
-                AUTO(weightedGraph, MAKE2(
-                         WeightedGraphWrapper,
-                         graph,
-                         get_cost
-                     ));
-                AUTO(tree, MAKE1(ShortestPathTree, weightedGraph));
                 tree.run(source, target, true);
                 change_flows(source, target, tree, &expandFlow);
                 result += expandFlow;
