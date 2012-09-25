@@ -25,8 +25,8 @@ TEST(structure, disjoint_set) {
     EXPECT_FALSE(a.same(8, 9));
     EXPECT_TRUE(a.same(8, 1));
 };
-TEST(structure, disjoint_set_dict) {
-    sbl::DisjointSetDict a;
+TEST(structure, disjoint_dict) {
+    sbl::DisjointMap<int> a;
     a.merge(1, 4);
     a.merge(8, 4);
     a.merge(2, 5);

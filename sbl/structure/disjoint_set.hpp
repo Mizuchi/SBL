@@ -63,6 +63,7 @@ class DisjointSetBase {
 
 /// Disjoint Set normal implementation.
 class DisjointSet: public DisjointSetBase<DisjointSet, long> {
+    private:
         friend class DisjointSetBase<DisjointSet, long>;
         std::vector<long> pnt;
         long &at(long x) {
@@ -73,17 +74,51 @@ class DisjointSet: public DisjointSetBase<DisjointSet, long> {
 };
 
 /// Disjoint Set map version.
-/// Has same API with normal one.
-class DisjointSetDict:
-    public DisjointSetBase<DisjointSetDict, long long> {
-        friend class DisjointSetBase<DisjointSetDict, long long>;
-        std::map<long long, long long> pnt;
-        long long &at(long long x) {
-            if(pnt.count(x) == 0)
-                pnt[x] = -1;
-            return pnt[x];
+template<class T>
+class DisjointMap {
+    private:
+        // http://www.gotw.ca/gotw/057.htm
+        // Recursive Declarations
+        // map T to a iterator of itself.
+        // Works like std::map<T, typename Map::iterator> Map;
+        class MapIterWrapper;
+        typedef std::map<T, MapIterWrapper> Map;
+        typedef typename Map::iterator MapIter;
+
+        class MapIterWrapper {
+            public:
+                MapIterWrapper() {}
+                MapIterWrapper(MapIter p) : m(p) {}
+                MapIter find_root() {
+                    if (m != m->second.m) 
+                        // This is not root, look back upon father.
+                        m = m->second.find_root();
+                    return m;
+                }
+            private:
+                MapIter m;
+        }; // class MapIterWrapper
+
+        Map pnt;
+        MapIter find(T x) {
+            if (pnt.count(x) == 0) {
+                pnt[x] = pnt.begin();
+                pnt[x] = pnt.find(x);
+            }
+            return pnt[x].find_root();
+        }
+    public:
+        void merge(T x, T y) {
+            MapIter u = find(x), v = find(y);
+            if (u == v)
+                return;
+            u->second = v;
+        }
+        bool same(T x, T y) {
+            return find(x) == find(y);
         }
 };
 
 } // namespace sbl
 #endif
+
