@@ -103,6 +103,10 @@ class ShortestPathTree: private WeightedGraph {
             return edgeToFather[node];
         }
 
+        size_t size() const {
+            return value.size();
+        }
+
         ShortestPathTree(WeightedGraph _)
             : WeightedGraph(_) {}
 

@@ -10,7 +10,7 @@ struct ContainStateDef {
 };
 
 struct CompareStateDef {
-    enum type { greater, equal, less };
+    enum type { greater, equal_to, less, greater_equal, less_equal };
 };
 
 struct PositionStateDef {
@@ -27,7 +27,7 @@ static const Contain touch    = Contain::touch;
 static const Contain overlap  = Contain::overlap;
 
 static const Compare greater  = Compare::greater;
-static const Compare equal    = Compare::equal;
+static const Compare equal_to = Compare::equal_to;
 static const Compare less     = Compare::less;
 
 static const Position left    = Position::left;
