@@ -1,6 +1,7 @@
 #ifndef _sbl_stl_printer
 #define _sbl_stl_printer
 #include"../base.hpp"
+#include"../stdafx.h"
 #include<list>
 #include<deque>
 #include<iostream>

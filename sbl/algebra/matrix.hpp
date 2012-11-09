@@ -107,7 +107,7 @@ std::ostream &operator<<(std::ostream &os, const Matrix<T> &a) {
 }
 
 template<class T>
-bool __same_size(Matrix<T> lhs, Matrix<T> rhs) {
+bool __same_size(const Matrix<T> &lhs, const Matrix<T> &rhs) {
     return lhs.row_size() == rhs.row_size() and
            lhs.col_size() == rhs.col_size();
 

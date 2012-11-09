@@ -25,7 +25,8 @@ def get_all_files_from_dir(dirname):
     import os
     for root, dirs, files in os.walk(dirname):
         for filename in files:
-            result.append(os.path.join(root, filename))
+            if os.path.splitext(filename)[1] in {".c", ".cpp"}:
+                result.append(os.path.join(root, filename))
     return result
 
 def build_doc(bld):

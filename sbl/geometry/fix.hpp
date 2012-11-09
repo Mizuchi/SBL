@@ -39,6 +39,8 @@ inline static double sqrt(double a) {
     return almost_equal(a, 0) ? 0 : ::std::sqrt(a);
 }
 
+template<class T> T abs(T a) { return a > 0 ? a : -a; }
+
 } // namespace fix
 
 inline static long long round(double a) {

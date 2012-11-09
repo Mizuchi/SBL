@@ -3,8 +3,8 @@
 #include<typeinfo>
 #include<stdexcept>
 #include<vector>
+#include<iostream>
 #include"point.hpp"
-
 
 namespace sbl {
 template<class Point>
@@ -28,6 +28,12 @@ class BaseLine {
 };
 
 template<class Point>
+std::ostream& operator<<(std::ostream &os, const BaseLine<Point> &b) {
+    return os << "{" << b[0] << ", " << b[1] << "}";
+}
+
+
+template<class Point>
 struct Line : BaseLine<Point> {
     Line() {}
     Line(Point a, Point b): BaseLine<Point>(a, b) {}
@@ -43,6 +49,7 @@ template<class Point>
 Segment<Point> segment(Point a, Point b) {
     return Segment<Point>(a, b);
 }
+
 template<class Point>
 Line<Point> line(Point a, Point b) {
     return Line<Point>(a, b);
@@ -59,25 +66,58 @@ bool contain(Segment<Point> s, Point p) {
     return st == state::same or st == state::reverse;
 }
 
-template<class Point>
+template<template<class>class T1, template<class>class T2, class Point>
 std::vector<Point> intersect(
-    const BaseLine<Point> &a,
-    const BaseLine<Point> &b
+    const T1<Point> &a,
+    const T2<Point> &b
 ) {
     std::vector<Point> result;
     typedef typename Point::value_type value_type;
-    AUTO(s1, cross(b[0] - a[0], b[1] - a[0]));
-    AUTO(s2, cross(b[1] - a[1], b[0] - a[1]));
-    if (almost_equal(s1 + s2, 0))
+    AUTO(s0, cross(b[0] - a[0], b[1] - a[0]));
+    AUTO(s1, cross(b[1] - a[1], b[0] - a[1]));
+    if (almost_equal(s0 + s1, 0))
         return result;
-    e = (a[1] - a[0]) * (s1 / (s1 + s2)) + a[0];
-    bool aIsLine = typeid(a) == typeid(Line<Point>);
-    bool bIsLine = typeid(b) == typeid(Line<Point>);
-    if ((aIsLine or contain(static_cast<Segment<Point>&>(a), e)) and
-        (bIsLine or contain(static_cast<Segment<Point>&>(b), e)))
+    Point e = (a[1] * s0 + a[0] * s1) / (s0 + s1);
+    if ((typeid(T1<Point>) == typeid(Line<Point>) or contain(a, e)) and 
+        (typeid(T2<Point>) == typeid(Line<Point>) or contain(b, e)))
         result.push_back(e);
     return result;
 }
 
-} // namespace sbl 
+template<class Point>
+Point projection(const BaseLine<Point> &l, const Point &p) {
+    AUTO(t, dot(p - l[0], l[0] - l[1]) / dist_square(l[0], l[1]));
+    return l[0] + t * (l[0] - l[1]);
+}
+
+template<class Point>
+Point reflection(const BaseLine<Point> &l, const Point &p) {
+    return p + 2 * (projection(l, p) - p);
+}
+
+template<class Point>
+typename Point::value_type
+dist_square(const Line<Point> &l, Point p) {
+    return dist_square(projection(l, p), p);
+}
+
+template<class Point>
+typename Point::value_type
+dist_square(Point p, const Line<Point> &l) {
+    return dist_square(l, p);
+}
+
+template<class Point>
+typename Point::value_type
+dist(const Line<Point> &l, Point p) {
+    return fix::sqrt(dist_square(l, p));
+}
+
+template<class Point>
+typename Point::value_type
+dist(Point p, const Line<Point> &l) {
+    return dist(l, p);
+}
+
+} // namespace sbl
 #endif

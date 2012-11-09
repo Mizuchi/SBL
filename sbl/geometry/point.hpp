@@ -10,6 +10,12 @@ namespace sbl {
 typedef std::complex<double> Point;
 
 template<class Point>
+bool almost_equal(Point a, Point b) {
+    return almost_equal(real(a), real(b)) and
+           almost_equal(imag(a), imag(b));
+}
+
+template<class Point>
 typename Point::value_type
 cross(Point a, Point b) {
     return imag(conj(a) * b);
@@ -26,17 +32,21 @@ struct PointLess { // '_'!
     bool operator()(Point a, Point b) const {
         return real(a) != real(b) ? real(a) < real(b) : imag(a) < imag(b);
     }
-}; // struct PointLess 
+}; // struct PointLess
 
 // stand in 0, face to a, which position is b on.
 template<class Point>
 state::Position position(Point a, Point b) {
-    if (fix::cmp(cross(a, b), 0) == state::less) return state::right;
-    if (fix::cmp(cross(a, b), 0) == state::greater) return state::left;
-    if (fix::cmp(dot(a, b), 0) == state::less) return state::reverse;
-    if (fix::cmp(norm(a), norm(b)) == state::greater) return state::back;
-    if (fix::cmp(norm(a), norm(b)) == state::less) return state::front;
-    return state::same;
+    // XXX: need better way to check if two float is almost equal.
+    if (almost_equal(a, b)) return state::same;
+    typename Point::value_type scale = abs(a) * abs(b);
+    if (scale < 1) scale = 1;
+    if (not almost_equal(cross(a, b) / scale, 0))
+        return cross(a, b) < 0 ? state::right : state::left;
+    if (not almost_equal(dot(a, b) / scale, 0) and dot(a, b) < 0)
+        return state::reverse;
+    return norm(a) < norm(b) ?  state::front : state::back;
+
 }
 
 // stand in a, face to b, which position is c on.
@@ -55,12 +65,6 @@ template<class Point>
 typename Point::value_type
 dist(Point a, Point b) {
     return fix::sqrt(norm(a - b));
-}
-
-template<class Point>
-typename Point::value_type
-angle(Point a, Point b) {
-    return fix::acos(dot(a, b) / abs(a) / abs(b));
 }
 
 } // namespace sbl

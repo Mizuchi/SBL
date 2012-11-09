@@ -12,7 +12,6 @@ TEST(geometry, point_position) {
     using namespace sbl;
     {
         Point a(2, 4), b(3, 3), c(4, 2);
-        EXPECT_TRUE(on_same_line(a, b, c));
 
         EXPECT_EQ(position(b, a), state::left);
         EXPECT_NE(position(b, a), state::right);
