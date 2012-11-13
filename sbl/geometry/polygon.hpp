@@ -11,7 +11,6 @@ template<class Point>
 Point next(const Polygon<Point> &a, size_t i) {
     return i + 1 == a.size() ? a[0] : a[i + 1];
 }
-
 template<class Point>
 state::Contain contain(const Polygon<Point> &poly, const Point &p) {
     size_t inside = false;
@@ -31,7 +30,7 @@ typename Point::value_type
 area_double(const Polygon<Point> &p) {
     if (p.empty()) return 0;
     typename Point::value_type result = 0;
-    for (size_t i = 0; i < p.size(); ++i) 
+    for (size_t i = 0; i < p.size(); ++i)
         result += cross(p[i], next(p, i));
     return result;
 }
@@ -40,6 +39,20 @@ template<class Point>
 typename Point::value_type
 area(const Polygon<Point> &p) {
     return area_double(p) / 2.0;
+}
+
+template<class Point>
+Point centroid(const Polygon<Point> &p) {
+    Point result;
+    if (almost_equal(area_double(p), 0)) {
+        FOR(i, p) result += *i;
+        result /= p.size();
+    } else {
+        for (size_t i = 0; i < p.size(); ++i)
+            result += cross(p[i], next(p, i)) * (p[i] + next(p, i));
+        result /= area_double(p) * 3;
+    }
+    return result;
 }
 
 } // namespace sbl
