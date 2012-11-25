@@ -32,6 +32,7 @@ class StaticRangeMaximumQuery {
                         f.back() = max(f.back(), f[i + (1UL << j) + j * s]);
                 }
         }
+        /// @brief get max element in range [l, r)
         T top(size_t l, size_t r) const {
             size_t j = log2(r - l);
             return max(f[l + j * s], f[r - (1UL << j) + j * s]);
@@ -61,9 +62,11 @@ class DynamicRangeMaximumQuery {
             return f[n] = comp(p, q) ? q : p;
         }
     public:
+        /// @brief change the x-index element to d
         void replace(size_t x, T d) {
             change(x, d, 0, 0, s);
         }
+        /// @brief get max element in range [l, r)
         T top(size_t x, size_t y) const {
             return *getmax(x, y, 0, 0, s);
         }
