@@ -9,7 +9,7 @@ namespace sbl {
 using std::size_t;
 
 template < class T, class Compare = std::less<T> >
-class StaticRangeMinimunQuery {
+class StaticRangeMaximumQuery {
     private:
         std::vector<T> f;
         size_t s;
@@ -22,7 +22,7 @@ class StaticRangeMinimunQuery {
         }
     public:
         template<class BeginIter, class EndIter>
-        StaticRangeMinimunQuery(BeginIter a, EndIter b): f(a, b) {
+        StaticRangeMaximumQuery(BeginIter a, EndIter b): f(a, b) {
             s = f.size();
             f.reserve(s * log2(s));
             for (size_t j = 0; j < log2(s); j++)
@@ -39,7 +39,7 @@ class StaticRangeMinimunQuery {
 };
 
 template < class T, class Compare = std::less<T> >
-class DynamicRangeMinimunQuery {
+class DynamicRangeMaximumQuery {
     private:
         Compare comp;
         std::vector<T> f;
@@ -67,7 +67,7 @@ class DynamicRangeMinimunQuery {
         T top(size_t x, size_t y) const {
             return *getmax(x, y, 0, 0, s);
         }
-        DynamicRangeMinimunQuery(size_t num, T init)
+        DynamicRangeMaximumQuery(size_t num, T init)
             : f(num * 4, init), s(num) {}
 };
 
