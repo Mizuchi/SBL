@@ -46,7 +46,7 @@ template<class T> T get_divisor(T n) {
             x = add_mod(mul_mod(x, x, n), c, n);
             y = add_mod(mul_mod(y, y, n), c, n);
             y = add_mod(mul_mod(y, y, n), c, n);
-            d = gcd(std::max(x - y, y - x), n);
+            d = gcd(x > y ? x - y : y - x, n);
         } while (d == 1);
         if (d != n) return d;
     }
