@@ -3,7 +3,7 @@
 #include"modular.hpp"
 
 namespace sbl {
-/// Return whether a integer number is a prime
+/// Return whether a integer number is prime number
 template<class T>
 bool isprime(T x) {
     // http://en.wikipedia.org/wiki/Primality_test
