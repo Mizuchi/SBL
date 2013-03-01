@@ -47,7 +47,7 @@ class DynamicRangeMaximumQuery {
         size_t s;
         const T *getmax(size_t x, size_t y, size_t n, size_t l, size_t r) const {
             size_t m = (l + r) / 2;
-            if (y <= l || x >= r) return 0;
+            if (y <= l || x >= r) return NULL;
             if (x <= l && r <= y) return &f[n];
             const T *p = getmax(x, y, n * 2 + 1, l, m);
             const T *q = getmax(x, y, n * 2 + 2, m, r);
