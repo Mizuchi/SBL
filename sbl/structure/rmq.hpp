@@ -43,8 +43,18 @@ template < class T, class Compare = std::less<T> >
 class DynamicRangeMaximumQuery {
     private:
         Compare comp;
+
+        /// store segment tree
         std::vector<T> f;
+
         size_t s;
+        /// @brief get maximum value in [x, y]. 
+        ///
+        /// @param n current node's index
+        /// @param l current node's left bound
+        /// @param r current node's right bound
+        ///
+        /// @return pointer to the maximum value
         const T *getmax(size_t x, size_t y, size_t n, size_t l, size_t r) const {
             size_t m = (l + r) / 2;
             if (y <= l || x >= r) return NULL;
@@ -67,8 +77,8 @@ class DynamicRangeMaximumQuery {
             change(x, d, 0, 0, s);
         }
         /// @brief get max element in range [l, r)
-        T top(size_t x, size_t y) const {
-            return *getmax(x, y, 0, 0, s);
+        T top(size_t l, size_t r) const {
+            return *getmax(l, r, 0, 0, s);
         }
         DynamicRangeMaximumQuery(size_t num, T init)
             : f(num * 4, init), s(num) {}

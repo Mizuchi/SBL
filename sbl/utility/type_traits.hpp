@@ -18,17 +18,6 @@ class Null;
 
 //////////////////////////////////////////////////////////////////////////////
 
-/// hides a function overload or template specialization based on compile-time 
-/// boolean
-template<bool B, class T = void>
-struct enable_if {};
-
-template<class T>
-struct enable_if<true, T> {
-    typedef T type;
-};
-//////////////////////////////////////////////////////////////////////////////
-
 /// Provides member typedef type, which is defined as T if B is true at compile
 /// time, or as F if B is false. 
 template<bool B, class T, class F> struct conditional { typedef T type; };
