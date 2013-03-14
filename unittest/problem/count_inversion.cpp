@@ -1,4 +1,5 @@
 #include<gtest/gtest.h>
+#include<algorithm>
 #include"../../sbl/problem/count_inversion.hpp"
 
 TEST(problem, count_inversion) {

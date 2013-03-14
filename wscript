@@ -6,7 +6,7 @@ out = 'build'
 import os
 
 def options(opt):
-    opt.load('compiler_cxx')
+    opt.load('compiler_cxx waf_unit_test')
     opt.add_option("--doc", 
             action="store_true", 
             default=False, 
@@ -18,7 +18,7 @@ def configure(cfg):
     cfg.find_program('convert', var='CONVERT')
     cfg.find_program("sphinx-build2", var="SPHINXBUILD")
     cfg.find_program("doxygen", var="DOXYGEN")
-    cfg.load('compiler_cxx')
+    cfg.load('compiler_cxx waf_unit_test')
 
 def get_all_files_from_dir(dirname):
     result = []
@@ -58,47 +58,51 @@ def build_doc(bld):
         name   = 'html',
     )
 
+class UpdateUnitest:
 
-def unittest(bld):
+    def __init__(self, filename, target):
+        self.filename = filename
+        self.target = target
 
-    def update_unittest_main(self):
+    def update_unittest_main(self, bld):
         '''Automatically generate unit test main.cpp'''
-        allTestFile = get_all_files_from_dir('unittest')
-        include = ""
-        for testFile in allTestFile:
-            include += '#include"../' + testFile + '"\n'
         code = r'''
         #include<gtest/gtest.h>
-        #include"../sbl/debug.hpp"
-        {}
+        #include<sbl/debug.hpp>
+        #include<{}>
         int main(int argv, char **argc) {{
             testing::InitGoogleTest(&argv, argc);
             return RUN_ALL_TESTS();
         }}
-        '''.format(include)
-        with open('build/test.cpp', 'w') as maincpp:
+        '''.format(self.filename)
+        with open('build/' + self.target, 'w') as maincpp:
             maincpp.write(code)
-        return self.exec_command("true")
+        return bld.exec_command("true")
+
+def unittest(bld):
 
     bld.read_shlib('gtest')
-    bld(
-        rule=update_unittest_main,
-        source=get_all_files_from_dir('unittest'),
-        target="test.cpp",
-    )
-    bld.program(
-        source='test.cpp',
-        target='test',
-        cxxflags=['-Wall', '-Werror'],
-        use='gtest',
-    )
-    bld(
-        rule="./${SRC}",
-        source='test',
-        name='unittest',
-    )
+    for i in get_all_files_from_dir('unittest'):
+        u = UpdateUnitest(i, i+'.test.cpp')
+        bld(
+            rule=u.update_unittest_main,
+            source=i,
+            target=i+'.test.cpp',
+        )
+        bld.program(
+            features='test',
+            source=i+'.test.cpp',
+            target=i+'.test',
+            includes='.',
+            cxxflags=['-Wall', '-Werror'],
+            use='gtest',
+        )
+
+    from waflib.Tools import waf_unit_test
+    bld.add_post_fun(waf_unit_test.summary)
 
 def build(bld):
+
     if bld.options.doc:
         build_doc(bld)
 
