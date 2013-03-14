@@ -60,14 +60,6 @@ class VectorTree: private detail::VectorTreeBase<NodePtr, GetNode, Update, Expan
             if(l == r) return NULL;
             return replace_segment(l, r, NULL);
         }
-
-        /// swap two child of a given node
-        static void XXX_swap_child(NodePtr a) {
-            NodePtr left = Base::get_left(a);
-            NodePtr right = Base::get_right(a);
-            Base::link_left(a, right);
-            Base::link_right(a, left);
-        }
 }; // class VectorTree
 } // namespace sbl;
 
