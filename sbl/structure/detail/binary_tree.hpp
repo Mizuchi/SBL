@@ -12,6 +12,8 @@ template<class NodePtr>
 class BinaryTreeNodeBase {
     private:
         template<class, class> friend class NodeAlgorithms;
+        template<class NodeP, class Functor> friend
+        void inorder_travel(NodeP node, Functor functor, size_t depth);
         NodePtr left;   ///< left child
         NodePtr right;  ///< right child
         NodePtr parent; ///< parent node
@@ -20,6 +22,15 @@ class BinaryTreeNodeBase {
     protected:
         ~BinaryTreeNodeBase() {}
 };
+
+template<class NodePtr, class Functor>
+void inorder_travel(NodePtr node, Functor functor, size_t depth = 0) {
+    if (node != NULL) {
+        inorder_travel(node->left, functor, depth + 1);
+        functor(node, depth);
+        inorder_travel(node->right, functor, depth + 1);
+    }
+}
 
 template<class NodePtr, class GetNode>
 class NodeAlgorithms {
@@ -191,7 +202,6 @@ class BinaryTreeBase {
             return algorithm::is_left(x);
         }
 }; // class BinaryTreeBase
-
 } // namespace detail
 } // namespace sbl
 #endif

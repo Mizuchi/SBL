@@ -2,17 +2,18 @@
 #define _sbl_vector_tree_impl
 #include"detail/vector_tree.hpp"
 
+
 namespace sbl {
 
 template<class NodePtr>
 class VectorTreeNode: public detail::VectorTreeNodeBase<NodePtr> {};
 
-template<class NodePtr, class GetNode, class Update, class Expand>
-class VectorTree: private detail::VectorTreeBase<NodePtr, GetNode, Update, Expand> {
+template<class NodePtr, class GetNode, class Expand, class Update>
+class VectorTree: private detail::VectorTreeBase<NodePtr, GetNode, Expand, Update> {
     public:
-        NodePtr root;
-        typedef detail::VectorTreeBase<NodePtr, GetNode, Update, Expand> Base;
-        typedef VectorTree<NodePtr, GetNode, Update, Expand> Self;
+        mutable NodePtr root;
+        typedef detail::VectorTreeBase<NodePtr, GetNode, Expand, Update> Base;
+        typedef VectorTree<NodePtr, GetNode, Expand, Update> Self;
 
         VectorTree(): root(NULL) {}
 
@@ -34,7 +35,7 @@ class VectorTree: private detail::VectorTreeBase<NodePtr, GetNode, Update, Expan
             do {
                 --p;
                 insert(n, p);
-            } while(p != beg);
+            } while (p != beg);
         }
 
         /// @return number of element
@@ -51,13 +52,13 @@ class VectorTree: private detail::VectorTreeBase<NodePtr, GetNode, Update, Expan
 
         /// call(root of subtree in range [l, r))
         template<class Callable>
-        void call_segment(size_t l, size_t r, Callable call) {
+        void call_segment(size_t l, size_t r, Callable call) const {
             root = Base::call_segment(root, l, r, call);
         }
 
         /// remove add element in range [l, r)
         NodePtr erase(size_t l, size_t r) {
-            if(l == r) return NULL;
+            if (l == r) return NULL;
             return replace_segment(l, r, NULL);
         }
 }; // class VectorTree

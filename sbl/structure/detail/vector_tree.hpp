@@ -11,13 +11,13 @@ class VectorTreeNodeBase: public OrderStatisticSplayTreeNodeBase<NodePtr> {
         ~VectorTreeNodeBase() {}
 };
 
-template<class NodePtr, class GetNode, class Update, class Expand>
-class VectorTreeBase: public OrderStatisticSplayTreeBase<NodePtr, GetNode, Update, Expand> {
+template<class NodePtr, class GetNode, class Expand, class Update>
+class VectorTreeBase: public OrderStatisticSplayTreeBase<NodePtr, GetNode, Expand, Update> {
     protected:
         ~VectorTreeBase() {}
     public:
-        typedef OrderStatisticSplayTreeBase<NodePtr, GetNode, Update, Expand> Base;
-        typedef VectorTreeBase<NodePtr, GetNode, Update, Expand> Self;
+        typedef OrderStatisticSplayTreeBase<NodePtr, GetNode, Expand, Update> Base;
+        typedef VectorTreeBase<NodePtr, GetNode, Expand, Update> Self;
         using Base::get_left;
         using Base::get_right;
         using Base::get_child;
