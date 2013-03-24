@@ -148,7 +148,10 @@ class OrderStatisticSplayTreeBase:
             return add(root, newNode, InsertPosition(n));
         }
 };
-
 } // namespace detail
+template<class NodePtr, class GetNode, class Expand, class Update>
+class OrderStatisticSplayTree:
+    public detail::OrderStatisticSplayTreeBase<NodePtr, GetNode, Expand, Update> {};
+
 } // namespace sbl
 #endif

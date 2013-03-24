@@ -53,6 +53,7 @@ class VectorTree: private detail::VectorTreeBase<NodePtr, GetNode, Expand, Updat
         /// call(root of subtree in range [l, r))
         template<class Callable>
         void call_segment(size_t l, size_t r, Callable call) const {
+            assert(l < r);
             root = Base::call_segment(root, l, r, call);
         }
 

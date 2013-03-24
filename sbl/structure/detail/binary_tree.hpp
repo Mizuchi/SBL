@@ -11,9 +11,7 @@ template<class NodePtr, class GetNode> class BinaryTreeBase;
 template<class NodePtr>
 class BinaryTreeNodeBase {
     private:
-        template<class, class> friend class NodeAlgorithms;
-        template<class NodeP, class Functor> friend
-        void inorder_travel(NodeP node, Functor functor, size_t depth);
+        template<class, class> friend class BinaryTreeBase;
         NodePtr left;   ///< left child
         NodePtr right;  ///< right child
         NodePtr parent; ///< parent node
@@ -23,17 +21,8 @@ class BinaryTreeNodeBase {
         ~BinaryTreeNodeBase() {}
 };
 
-template<class NodePtr, class Functor>
-void inorder_travel(NodePtr node, Functor functor, size_t depth = 0) {
-    if (node != NULL) {
-        inorder_travel(node->left, functor, depth + 1);
-        functor(node, depth);
-        inorder_travel(node->right, functor, depth + 1);
-    }
-}
-
 template<class NodePtr, class GetNode>
-class NodeAlgorithms {
+class BinaryTreeBase {
     public:
 
         /// get the node information from NodePtr
@@ -133,75 +122,18 @@ class NodeAlgorithms {
         static bool is_left(NodePtr x) {
             return not is_right(x);
         }
-
-}; // class NodeAlgorithms
-
-template<class NodePtr, class GetNode>
-class BinaryTreeBase {
-    private:
-        typedef NodeAlgorithms<NodePtr, GetNode> algorithm;
-    protected:
-        ~BinaryTreeBase() {}
     public:
-
-        /// get the node information from NodePtr
-        static BinaryTreeNodeBase<NodePtr> &get_node(NodePtr a) {
-            return algorithm::get_node(a);
-        }
-
-        /// get the child according index {0: left, 1: right}
-        static NodePtr get_child(NodePtr a, size_t idx) {
-            return algorithm::get_child(a, idx);
-        }
-
-        /// get left child
-        static NodePtr get_left(NodePtr a) {
-            return algorithm::get_left(a);
-        }
-
-        /// get right child
-        static NodePtr get_right(NodePtr a) {
-            return algorithm::get_right(a);
-        }
-
-        /// get parent
-        static NodePtr get_parent(NodePtr a) {
-            return algorithm::get_parent(a);
-        }
-
-        static void link_left(NodePtr a, NodePtr b) {
-            algorithm::link_left(a, b);
-        }
-
-        static void link_right(NodePtr a, NodePtr b) {
-            algorithm::link_right(a, b);
-        }
-
-        /// link the child according index {0: left, 1: right}
-        static void link_child(NodePtr a, size_t idx, NodePtr b) {
-            algorithm::link_child(a, idx, b);
-        }
-
-        /// set parent
-        static void set_parent(NodePtr a, NodePtr b) {
-            algorithm::set_parent(a, b);
-        }
-
-        /// swap two child of a given node
-        static void swap_child(NodePtr a) {
-            algorithm::swap_child(a);
-        }
-
-        /// check if x is a right child
-        static bool is_right(NodePtr x) {
-            return algorithm::is_right(x);
-        }
-
-        /// check if x is a left child
-        static bool is_left(NodePtr x) {
-            return algorithm::is_left(x);
+        template<class Functor>
+        static void inorder_travel(NodePtr node, Functor functor, size_t depth = 0) {
+            if (node != NULL) {
+                inorder_travel(get_left(node), functor, depth + 1);
+                functor(node, depth);
+                inorder_travel(get_right(node), functor, depth + 1);
+            }
         }
 }; // class BinaryTreeBase
 } // namespace detail
+template<class NodePtr, class GetNode>
+class BinaryTree: public detail::BinaryTreeBase<NodePtr, GetNode> {};
 } // namespace sbl
 #endif
