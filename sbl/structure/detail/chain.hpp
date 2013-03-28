@@ -36,9 +36,9 @@ template<class T>
 struct SumBase {
     public:
         static const int feature = chainFeatures::sum;
-        T sumValue;
+        T allSum;
     protected:
-        SumBase(T value): sumValue(value) {}
+        SumBase(T value): allSum(value) {}
         ~SumBase() {}
 };
 template<class T>
@@ -57,13 +57,11 @@ struct MaxSumBase {
         T leftMaxSum;
         T rightMaxSum;
         T maxSum;
-        T allSum;
     protected:
         MaxSumBase(T value):
             leftMaxSum(value),
             rightMaxSum(value),
-            maxSum(value),
-            allSum(value) {}
+            maxSum(value) {}
         ~MaxSumBase() {}
 };
 template<class HashReturn>
