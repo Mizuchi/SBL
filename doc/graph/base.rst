@@ -1,4 +1,4 @@
 Graph Concept
 ###################
 
-.. doxygenfile:: graph/detail/base.hpp
+.. doxygenfile:: graph/base.hpp
