@@ -15,7 +15,7 @@ namespace sbl {
 /// And sbl::Complex doesn't have this limit.
 /// When you use a integer type, it becomes gaussian integer.
 /// The more important thing is sbl::Complex works with sbl::Float,
-/// which is widely used in sbl::algebra and sbl::geometry.
+/// which was widely used in sbl::algebra and sbl::geometry.
 template<class T>
 class Complex {
     private:

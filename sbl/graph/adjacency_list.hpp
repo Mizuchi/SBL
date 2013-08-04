@@ -10,6 +10,7 @@ namespace sbl {
 
 using std::size_t;
 
+/// read GraphBase for the interface.
 class AdjacencyList {
     public:
         typedef size_t Edge;
@@ -65,7 +66,7 @@ class AdjacencyList {
             return info[head];
         }
 
-        Edge end_edge(Node node) const {
+        Edge end_edge(Node /*node*/) const {
             return sentinel;
         }
 
@@ -102,6 +103,7 @@ class AdjacencyList {
                     return iter;
             }
             assert(false and "GraphCommon::prev: edge is not in this graph");
+            return 0;
         }
 
         // O(|E|)
@@ -115,6 +117,7 @@ class AdjacencyList {
                 }
             }
             assert(false and "GraphCommon::head: edge is not in this graph");
+            return 0;
         }
 
         // O(|E|)

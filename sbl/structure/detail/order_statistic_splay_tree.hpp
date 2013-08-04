@@ -19,15 +19,6 @@ class OrderStatisticSplayTreeNodeBase: public SplayTreeNodeBase<NodePtr> {
         ~OrderStatisticSplayTreeNodeBase() {}
 };
 
-/** @brief Size Splay Tree
- *
- * Size splay tree an augmenting data structure, which add size attribute to every tree
- * nodes. Size attribute represent how many nodes in current subtree (treat the
- * node we focus as root). For more information, read CLRS Chapter 14.
- *
- * @tparam NodePtr a pointer to the node which defined by user.
- */
-
 template<class NodePtr, class GetNode, class Expand, class Update>
 class BaseOfOrderStatisticSplayTreeBase {
     private:
@@ -149,6 +140,19 @@ class OrderStatisticSplayTreeBase:
         }
 };
 } // namespace detail
+
+/** @brief splay tree with size attribute.
+ *
+ * Size splay tree is an augmenting data structure, which add size attribute to
+ * every tree nodes. Size attribute represent how many nodes in current subtree
+ * (treat the node we focus as root). For more information, read CLRS Chapter
+ * 14.
+ *
+ * @tparam NodePtr a pointer to the node which defined by user.
+ * @tparam GetNode function that used to get node from user type.
+ * @tparam Expand expand policy
+ * @tparam Update update policy
+ */
 template<class NodePtr, class GetNode, class Expand, class Update>
 class OrderStatisticSplayTree:
     public detail::OrderStatisticSplayTreeBase<NodePtr, GetNode, Expand, Update> {};

@@ -4,7 +4,7 @@
 #include"modular.hpp"
 namespace sbl {
 
-/// \Return {x | a * x % n == b and 0 <= x and x < n}
+/// @return {x | a * x % n == b and 0 <= x and x < n}
 template<class T> std::vector<T> 
 solve_modular_linear_equations(T a, T b, T n) {
     // CLRS 2nd Edition Page. 868

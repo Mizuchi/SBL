@@ -14,12 +14,13 @@ namespace bigInteger {
 
 static const long long kBase = 1e6;
 static const int kBit = 6;
+
+/// integer types that have infinite range and precision.
 class Bigint:
-    public operatorOverloading::Base <
-    Bigint,
-    std::vector<long long>,
-    operatorOverloading::ForbiddenWrapperTypePolicy
-        > {
+    public operatorOverloading::Base<
+        Bigint,
+        std::vector<long long>,
+        operatorOverloading::ForbiddenWrapperTypePolicy> {
     private:
         typedef std::vector<long long> T;
         typedef operatorOverloading::Base <

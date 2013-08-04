@@ -6,6 +6,7 @@
 #include<map>
 
 namespace sbl {
+
 /// Compute discrete logarithm in O(sqrt(p))
 /// \post x ** result == y (mod z)
 /// \post result <= z

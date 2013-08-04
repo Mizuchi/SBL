@@ -4,6 +4,9 @@
 
 namespace sbl {
 
+/// @brief Rational number
+///
+/// @tparam I type of numerator and denominator
 template<typename I>
 class Rational {
 

@@ -10,6 +10,7 @@
 
 namespace sbl {
 
+/// @brief get the shortest path of graph by bellman ford algorithm.
 template <class WeightedGraph>
 class ShortestPathTree: private WeightedGraph {
     private:

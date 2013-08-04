@@ -1,3 +1,5 @@
+/// @brief vector like, splay based tree, used to implement sbl::Chain.
+
 #ifndef _sbl_vector_tree_base
 #define _sbl_vector_tree_base
 #include"order_statistic_splay_tree.hpp"

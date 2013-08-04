@@ -14,6 +14,8 @@
 
 namespace sbl {
 
+namespace detail {
+
 struct Unchange {
     template<class T> T operator()(T a) const {
         return a;
@@ -111,7 +113,6 @@ class RadixSort {
             }
         }
 
-
         ~RadixSort() {
             // write back
             size_t idx = 0;
@@ -121,6 +122,8 @@ class RadixSort {
             }
         }
 };
+
+} // namespace detail 
 
 /// \ingroup auxalg
 ///
@@ -149,22 +152,22 @@ class RadixSort {
 /// signed or unsigned.
 template<class BegIter, class EndIter, class Functor>
 void radix_sort(BegIter beg, EndIter end, Functor functor) {
-    RadixSort<EndIter, Functor>(beg, end, functor);
+    detail::RadixSort<EndIter, Functor>(beg, end, functor);
 }
 
 template<size_t digits, class BegIter, class EndIter, class Functor>
 void radix_sort_digits(BegIter beg, EndIter end, Functor functor) {
-    RadixSort<EndIter, Functor, digits>(beg, end, functor);
+    detail::RadixSort<EndIter, Functor, digits>(beg, end, functor);
 }
 
 template<class BegIter, class EndIter>
 void radix_sort(BegIter beg, EndIter end) {
-    radix_sort(beg, end, Unchange());
+    radix_sort(beg, end, detail::Unchange());
 }
 
 template<size_t digits, class BegIter, class EndIter>
 void radix_sort_digits(BegIter beg, EndIter end) {
-    radix_sort<digits>(beg, end, Unchange());
+    radix_sort<digits>(beg, end, detail::Unchange());
 }
 
 } // namespace sbl

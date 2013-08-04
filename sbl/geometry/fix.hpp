@@ -8,6 +8,7 @@
 
 namespace sbl {
 
+/// @return whether two float number is almost equal
 inline static bool almost_equal(double a, double b, int maxUlps = 4) {
     // TODO: ulps support
     STATIC_ASSERT(std::numeric_limits<double>::is_iec559, 

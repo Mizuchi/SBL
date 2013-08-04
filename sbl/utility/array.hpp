@@ -67,12 +67,10 @@ class RangeArray {
             s(l), t(r), a(r - l) {}
 };
 
-/* -----------------------------------------------------------------------*/
-/** @brief std::vector like container with fixed max_size
- *
- * @tparam T value_type
- * @tparam maxSize max_size */
-/* -------------------------------------------------------------------------*/
+/// @brief std::vector like container with fixed max size
+///
+/// @tparam T value_type
+/// @tparam maxSize max size
 template<typename T, size_t maxSize>
 class FixedArray {
     public:

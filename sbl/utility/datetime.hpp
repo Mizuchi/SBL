@@ -15,10 +15,12 @@ static inline bool is_valid(int day, int month, int year) {
     return day >= 15;
 }
 
+/// @return whether a given year is leap year
 static inline bool is_leap_year(int year) {
     return (year % 4 == 0 and year % 100 != 0) or year % 400 == 0;
 }
 
+/// Given year and month, return how many days in that month.
 static inline int days_of_month(int month, int year) {
     assert(month >= 1);
     assert(month <= 12);
@@ -37,6 +39,7 @@ int __absolute_days(int day, int month, int year) {
     return result;
 }
 
+/// @return days between two dates.
 static inline int days_between_two_dates(
     int day1, int month1, int year1,
     int day2, int month2, int year2

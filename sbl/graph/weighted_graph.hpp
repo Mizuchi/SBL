@@ -6,6 +6,8 @@
 #include"../utility/type_traits.hpp"
 
 namespace sbl {
+
+/// A adapter that keep the interface that get the weight of edge.
 template <
     class TGraph,
     class TGetWeight,

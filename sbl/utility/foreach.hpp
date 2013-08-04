@@ -20,6 +20,7 @@
     ASSIGN_AUTO(VALUE, *VAR(i))                                            \
         FOREACH_END()                                                  
 
+/// simulate C++11's range-based for loop
 #define foreach(VALUE, CONTAINER)                                          \
     FOREACH_ITERATOR(CONTAINER)                                            \
     FOREACH_VALUE_AUTO(VALUE)

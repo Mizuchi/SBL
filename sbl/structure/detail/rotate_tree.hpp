@@ -1,3 +1,7 @@
+/// @brief binary tree which support rotate operator.
+///
+/// Used to be a base class for red-black tree or splay tree.
+
 #ifndef _sbl_rotate_tree_base
 #define _sbl_rotate_tree_base
 #include"binary_tree.hpp"

@@ -1,5 +1,6 @@
 #ifndef _sbl_nullptr
 #define _sbl_nullptr
+/// @brief simulate C++11's nullptr
 static const class {
     public:
         template<class T>

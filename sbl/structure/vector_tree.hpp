@@ -8,6 +8,7 @@ namespace sbl {
 template<class NodePtr>
 class VectorTreeNode: public detail::VectorTreeNodeBase<NodePtr> {};
 
+/// @brief a low-level vector like data structure, used to implement sbl::Chain.
 template<class NodePtr, class GetNode, class Expand, class Update>
 class VectorTree: private detail::VectorTreeBase<NodePtr, GetNode, Expand, Update> {
     public:

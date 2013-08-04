@@ -3,6 +3,7 @@
 
 #include<cstdlib>
 namespace sbl {
+/// @brief generate a 31bit random number, port from knuth's TAOCP section 3.6.
 unsigned long random() {
     static const unsigned long A = 48271;
     static const unsigned long Q = 44488;

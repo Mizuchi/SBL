@@ -17,6 +17,7 @@ using std::size_t;
             ASSIGN_AUTO(ELEMENT, (MATRIX)[ROW][COL])                           \
             FOREACH_END()
 
+/// @brief Matrix class
 template<class T>
 class Matrix {
     protected:

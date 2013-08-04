@@ -41,6 +41,7 @@ area(const Polygon<Point> &p) {
     return area_double(p) / 2.0;
 }
 
+/// @return centroid of a polygon 
 template<class Point>
 Point centroid(const Polygon<Point> &p) {
     Point result;

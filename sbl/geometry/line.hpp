@@ -7,6 +7,8 @@
 #include"point.hpp"
 
 namespace sbl {
+
+/// @brief base class of line. Don't use it directly.
 template<class Point>
 class BaseLine {
     public:
@@ -33,12 +35,14 @@ std::ostream& operator<<(std::ostream &os, const BaseLine<Point> &b) {
 }
 
 
+/// Represent a line with infinite length.
 template<class Point>
 struct Line : BaseLine<Point> {
     Line() {}
     Line(Point a, Point b): BaseLine<Point>(a, b) {}
 };
 
+/// Represent a segment with finite length.
 template<class Point>
 struct Segment : BaseLine<Point> {
     Segment() {}
@@ -66,13 +70,13 @@ bool contain(Segment<Point> s, Point p) {
     return st == state::same or st == state::reverse;
 }
 
+/// @return the intersect points.
 template<template<class>class T1, template<class>class T2, class Point>
 std::vector<Point> intersect(
     const T1<Point> &a,
     const T2<Point> &b
 ) {
     std::vector<Point> result;
-    typedef typename Point::value_type value_type;
     AUTO(s0, cross(b[0] - a[0], b[1] - a[0]));
     AUTO(s1, cross(b[1] - a[1], b[0] - a[1]));
     if (almost_equal(s0 + s1, 0))

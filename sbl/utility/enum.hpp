@@ -1,6 +1,7 @@
 #ifndef _sbl_enum
 #define _sbl_enum
 namespace sbl {
+/// safe enum idiot
 template<typename Def, typename Inner = typename Def::type>
 class Enum : public Def {
     private:

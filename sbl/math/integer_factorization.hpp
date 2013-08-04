@@ -10,9 +10,9 @@
 #include"../utility/bits.hpp"
 
 namespace sbl {
+
 /// @brief factorize a given integer
 /// \post \prod{k^{result[k]}} = n
-
 template<class T>
 std::map<T, size_t> factorize_integer(T n) {
     // http://en.wikipedia.org/wiki/Trial_division

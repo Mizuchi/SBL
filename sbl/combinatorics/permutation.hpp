@@ -6,6 +6,7 @@
 
 namespace sbl {
 using std::size_t;
+/// Store a permutation
 class Permutation {
         // http://en.wikipedia.org/wiki/Permutation
     private:

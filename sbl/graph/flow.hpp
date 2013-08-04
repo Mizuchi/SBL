@@ -266,7 +266,7 @@ class MaxFlow {
 }; // struct MaxFlow
 
 
-/// @brief calculate the max flow of current flow network
+/// @brief calculate the max flow of current flow network.
 ///
 /// Actually, this is just a wrapper for MaxFlow.
 template<class Graph, class GetCapacity, class GetFlow, class SetFlow>
@@ -283,6 +283,9 @@ void max_flow(
     main.run(source, target);
 }
 
+/// @brief calculate the max flow with min cost of current flow network.
+///
+/// another wrapper for MaxFlow.
 template<class Graph, class GetCapacity, class GetFlow, class SetFlow, class GetCost>
 void minimum_cost_flow(
     Graph input_graph,              ///< any sbl's graph

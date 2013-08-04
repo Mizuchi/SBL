@@ -235,6 +235,9 @@ vector<size_t> make_height(
 }
 } // namespace suffixArray
 
+/// @brief calc sa, rank and height for suffix array.
+///
+/// TODO: add interface to get the result.
 class SuffixArray {
     private:
         std::vector<size_t> sa;

@@ -133,6 +133,11 @@ class BinaryTreeBase {
         }
 }; // class BinaryTreeBase
 } // namespace detail
+
+/// @brief binary tree, intrusive data structure.
+///
+/// @tparam NodePtr a pointer to the node which defined by user.
+/// @tparam GetNode function that used to get node from user type.
 template<class NodePtr, class GetNode>
 class BinaryTree: public detail::BinaryTreeBase<NodePtr, GetNode> {};
 } // namespace sbl

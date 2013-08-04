@@ -5,6 +5,8 @@
 
 namespace sbl {
 
+/// @brief Chain is a vector like data structure which has log time complexity
+/// for many operators.
 template<class T, int features, class Hash = Empty>
 class Chain {
     public:

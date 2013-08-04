@@ -1,3 +1,4 @@
+/// @brief binary which support splay operator
 #ifndef _sbl_splay_tree_base
 #define _sbl_splay_tree_base
 #include"rotate_tree.hpp"

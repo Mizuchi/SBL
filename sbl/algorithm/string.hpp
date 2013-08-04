@@ -6,6 +6,7 @@
 
 namespace sbl {
 
+/// @return a list of the words in the string, using sep as the delimiter.
 std::vector<std::string> 
 split(const std::string &str, const std::string &delim = " \t\r\n") {
     typedef std::vector<std::string> Return;
@@ -21,11 +22,11 @@ split(const std::string &str, const std::string &delim = " \t\r\n") {
     return res;
 }
 
-// ret satisfy (rotate(beg, ret, end) <= rotate(beg, iter, end) for any iter)
-// arg: "dontcallmebfu"
-// ret:  .....^
+/// @return satisfy (rotate(beg, ret, end) <= rotate(beg, iter, end) for any iter)
 template<class Iter>
 Iter min_rotate(Iter beg, Iter end) {
+    // arg: "dontcallmebfu"
+    // ret:  .....^
     std::size_t i = 0, j = 1, k = 0, l = std::distance(beg, end);
     while (i < l and j < l and k < l) {
         AUTO(p, *(beg + (i + k) % l));

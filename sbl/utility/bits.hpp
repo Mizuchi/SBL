@@ -34,7 +34,7 @@ bool less_than_zero(T a) {
     return __LessThanZero<std::numeric_limits<T>::is_signed>()(a);
 }
 
-/// Return a ** n, n must be a integer
+/// @return a ** n, n must be a integer
 template<class T, class U>
 T power_integer(T a, U n) {
     __is_integer<T>();
@@ -48,7 +48,7 @@ T power_integer(T a, U n) {
     }
 }
 
-/// Return 2 ** x
+/// @return 2 ** x
 template<class T>
 T power_of_two(T x) {
     __is_integer<T>();
@@ -56,14 +56,14 @@ T power_of_two(T x) {
     return T(1) << x;
 }
 
-/// Returns whether u-th bit in t is set
+/// @return whether u-th bit in t is set
 template<class T>
 bool contain(T t, T u) {
     __is_integer<T>();
     return (t bitand power_of_two(u)) != 0;
 };
 
-/// Return digit sum of the binary representation of a given number.
+/// @return digit sum of the binary representation of a given number.
 /// It is also called the population count, popcount or sideways sum.
 /// \link http://en.wikipedia.org/wiki/Hamming_weight \endlink
 template<class T>
@@ -111,7 +111,7 @@ size_t lowest_set_bit_index(T number) {
     return result;
 }
 
-/// Return next power of two greater than x.
+/// @return next power of two greater than x.
 template<class T>
 T highest_set_bit(T number) {
     __is_integer<T>();
@@ -120,7 +120,7 @@ T highest_set_bit(T number) {
     return T(1) << (highest_set_bit_index(number) - 1);
 }
 
-/// Return minimum number bitand with given number is non-zero.
+/// @return minimum number bitand with given number is non-zero.
 template<class T>
 T lowest_set_bit(T number) {
     __is_integer<T>();
@@ -129,7 +129,7 @@ T lowest_set_bit(T number) {
     return T(1) << (lowest_set_bit_index(number) - 1);
 }
 
-/// Return random integer number less than a given number.
+/// @return random integer number less than a given number.
 template<class T>
 T random(T number = std::numeric_limits<int>::max()) {
     __is_integer<T>();
@@ -157,7 +157,7 @@ T random(T number = std::numeric_limits<int>::max()) {
 #define forsubset(subset, number) \
     for(AUTO(subset, number); subset > 0; subset = (subset - 1) bitand number)
 
-/// Return next number has the same number of set bits with given number.
+/// @return next number has the same number of set bits with given number.
 /// \post count_set_bits(result) == count_set_bits(p)
 /// \post result > p
 template<class T>
@@ -169,7 +169,7 @@ T next_combination(T p) {
     return r bitor(((i / l) >> 1) - 1);
 }
 
-/// Return whether a + b will not overflow
+/// @return whether a + b will not overflow
 template<class T> bool addition_is_safe(T a, T b) {
     __is_integer<T>();
 
@@ -194,7 +194,7 @@ template<class T> bool addition_is_safe(T a, T b) {
     return true;
 }
 
-/// Return whether a * b will not overflow
+/// @return whether a * b will not overflow
 template<class T>
 bool multiplication_is_safe(T a, T b) {
     __is_integer<T>();
@@ -221,7 +221,7 @@ bool multiplication_is_safe(T a, T b) {
     }
 }
 
-/// Return whether a ** b will not overflow
+/// @return whether a ** b will not overflow
 template<class T, class U>
 bool exponentiation_is_safe(T a, U b) {
     __is_integer<T>();
@@ -247,7 +247,8 @@ bool exponentiation_is_safe(T a, U b) {
     }
 }
 
-/// Return greatest integer less than or equal to the square root of given integer.
+/// @return greatest integer less than or equal to the square root of given
+/// integer.
 template<class T>
 T integer_sqrt(T number) {
     __is_integer<T>();

@@ -3,7 +3,7 @@
 #include"modular.hpp"
 
 namespace sbl {
-/// Return whether a integer number is prime number
+/// @return whether a integer number is prime number
 template<class T>
 bool isprime(T x) {
     // http://en.wikipedia.org/wiki/Primality_test
@@ -38,9 +38,10 @@ bool isprime(T x) {
     return true;
 }
 
-// arg: 20
-// ret: 2 3 5 7 11 13 17 19
+/// generator all prime numbers that not greater than n.
 static inline std::vector<size_t> generate_prime(size_t n) {
+    // arg: 20
+    // ret: 2 3 5 7 11 13 17 19
     std::vector<bool> a(++n);
     std::vector<size_t> p;
     for (size_t i = 2; i < n; i++) {
@@ -53,10 +54,16 @@ static inline std::vector<size_t> generate_prime(size_t n) {
     return p;
 }
 
-// Port from http://en.wikipedia.org/wiki/Sieve_of_atkin
-// arg: 10
-// ret: 00110101000
+/// @brief Another interface to generate prime numbers.
+///
+/// The result[n] indicate whether n is a prime number.
+/// For example, when input 10, the result is 00110101000
+/// which means 2, 3, 5, 7 is prime number since result[2] = 1, result[3] = 1, 
+/// etc. 0, 1, 4, 6, 8, 9, 10 is not prime number.
 static inline std::vector<bool> generate_prime_fast(size_t limit) {
+    // Port from http://en.wikipedia.org/wiki/Sieve_of_atkin
+    // arg: 10
+    // ret: 00110101000
     std::vector<bool> isPrime(limit + 1);
     for (size_t x = 1, xx = 1; xx <= limit; xx += 2 * x ++ + 1)
         for (size_t y = 1, yy = 1; yy <= limit; yy += 2 * y ++ + 1) {

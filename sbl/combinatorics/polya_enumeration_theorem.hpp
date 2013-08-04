@@ -4,6 +4,13 @@
 #include"permutation.hpp"
 #include"../algebra/generate_closure.hpp"
 namespace sbl {
+
+/// @brief Given some permutations, return the number of way to color the
+/// element which is unique under these permutations according polya theorem.
+///
+/// @param beg begin iterator for permutations
+/// @param end end iterator for permutations
+/// @param colorCount number of colors
 template<class Result, class IterBeg, class IterEnd>
 Result polya_enumeration_theorem(
     IterBeg beg,

@@ -1,10 +1,15 @@
 #ifndef _sbl_generate_closure
 #define _sbl_generate_closure
-#include"../utility/foreach.hpp"
+#include"../combinatorics/permutation.hpp"
 #include<iterator>
 #include<set>
 
 namespace sbl {
+/// @brief Generate the closure.
+///
+/// @param beg begin iterator
+/// @param end end iterator
+/// @param op operator
 template<class IterBeg, class IterEnd, class OperatorFunctor>
 std::set< typename std::iterator_traits<IterBeg>::value_type >
 generate_closure(

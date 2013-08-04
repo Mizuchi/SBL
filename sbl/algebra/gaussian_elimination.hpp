@@ -5,11 +5,16 @@
 
 namespace sbl {
 
+/// @brief apply gaussian elimination to a matrix.
+///
+/// @tparam T Type of matrix element
+/// @param A Matrix
+/// @param swapCount Return count of row swap. Used to get determinant.
+/// @param rank Return the rank of matrix.
 template<class T>
 void gaussian_elimination(Matrix<T> *A, size_t *swapCount, size_t *rank) {
     Matrix<T> &a = *A;
 
-    typedef typename Matrix<T>::value_type value_type;
     const size_t n = a.row_size();
     const size_t m = a.col_size();
     (*swapCount) = 1;
@@ -44,6 +49,7 @@ void gaussian_elimination(Matrix<T> *A, size_t *swapCount, size_t *rank) {
     }
 }
 
+/// Get the determinant of matrix
 template<class T>
 T determinant(Matrix<T> a) {
     assert(a.row_size() == a.col_size());
@@ -59,6 +65,7 @@ T determinant(Matrix<T> a) {
         return result;
 }
 
+/// Get the rank of matrix
 template<class T>
 size_t rank(Matrix<T> a) {
     size_t swapCount, rank;
@@ -66,6 +73,17 @@ size_t rank(Matrix<T> a) {
     return rank;
 }
  
+/// @brief Solve system of linear equations
+/// 
+/// The vector equation is equivalent to a matrix equation of the form
+/// AX = B
+/// where A is an m×n matrix, x is a column vector with n entries, and b is a
+/// column vector with m entries.
+///
+/// @param a the coefficients of the system
+/// @param b the constant terms
+///
+/// @return vector X indicate the solution
 template<class T>
 std::vector<T>
 solve_system_of_linear_equations(

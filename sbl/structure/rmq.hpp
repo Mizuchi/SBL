@@ -8,6 +8,7 @@
 namespace sbl {
 using std::size_t;
 
+/// @brief range maximum query problem for static array
 template < class T, class Compare = std::less<T> >
 class StaticRangeMaximumQuery {
     private:
@@ -39,6 +40,7 @@ class StaticRangeMaximumQuery {
         }
 };
 
+/// @brief range maximum query problem for dynamic array
 template < class T, class Compare = std::less<T> >
 class DynamicRangeMaximumQuery {
     private:

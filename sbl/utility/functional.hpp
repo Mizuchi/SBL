@@ -5,6 +5,7 @@
 
 namespace sbl {
 
+/// simulate C++11's new functor according N3421
 template<template<class> class Func>
 struct Functor {
     template<class T>
