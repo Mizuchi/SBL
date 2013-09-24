@@ -1,0 +1,7 @@
+Combinatorics
+=================
+
+.. toctree::
+   :glob:
+
+   combinatorics/*

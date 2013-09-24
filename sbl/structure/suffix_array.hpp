@@ -13,10 +13,10 @@ using std::vector;
 using std::size_t;
 
 class DC3 {
-        // DC3 algorithm
-        // http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.137.7871
-        //
-        // This implementation is much slow than the one on the paper.
+    // DC3 algorithm
+    // http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.137.7871
+    //
+    // This implementation is much slow than the one on the paper.
     public:
         struct CompressThree {
             size_t index;
@@ -252,5 +252,4 @@ class SuffixArray {
 };
 
 } // namespace sbl
-
 #endif

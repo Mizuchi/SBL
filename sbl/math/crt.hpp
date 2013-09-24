@@ -7,11 +7,9 @@
 
 namespace sbl {
 
-/// \return a solution to a Chinese Remainder Theorem problem.
-/// \pre gcd(m[i], m[j]) == 1
-/// \post return % a[i] == m[i]
-/// arg: [2, 3, 2]; [3, 5, 7]
-/// ret: 23
+/// @return a solution to a Chinese Remainder Theorem problem.
+/// @pre gcd(m[i], m[j]) == 1
+/// @post return % a[i] == m[i]
 template < 
     class Return,
     class IterBegA,
@@ -24,6 +22,8 @@ template <
     IterBegM begM,
     IterEndM endM
 ) {
+    // arg: [2, 3, 2]; [3, 5, 7]
+    // ret: 23
     assert(std::distance(begA, endA) == std::distance(begM, endM));
     Return result(0);
     Return p = 1;

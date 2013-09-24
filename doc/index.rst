@@ -11,15 +11,15 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   intro.rst
-   style.rst
-   utility.rst
-   algebra.rst
-   math.rst
-   structure.rst
-   algorithm.rst
-   graph.rst
-
+    intro
+    algebra
+    algorithm
+    combinatorics
+    geometry
+    graph
+    math
+    structure
+    utility
 
 
 Indices and tables
